@@ -1,4 +1,4 @@
-<h1>List Sinhvien<h1>
+<h1>List Sinh vien<h1>
 
 <table border='1'>
     <tr>

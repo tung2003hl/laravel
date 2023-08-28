@@ -15,6 +15,5 @@ use App\Http\Controllers\SinhvienController;
 */
 
 
-
 Route::get('/',[SinhvienController::class,'show']);
 

@@ -27,6 +27,13 @@
             <div class="mt-4">
                 <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
                 <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
+            </div>  
+            <div class="mt-4">
+            <x-label for="gender" value="{{ __('Gender') }}" />
+            <input type="radio" id="male" name="gender" value="1">
+            <label for="male">Male</label><br>
+            <input type="radio" id="female" name="gender" value="0">
+            <label for="female">Female</label><br>
             </div>
 
             @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
