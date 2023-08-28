@@ -1,18 +1,18 @@
-<h1>List Sinh vien<h1>
+<h1>Student List<h1>
 
 <table border='1'>
     <tr>
         <td>ID</td>
-        <td>Ten</td>
-        <td>Tuoi</td>
-        <td>Diem</td>
+        <td>Name</td>
+        <td>Age</td>
+        <td>Mark</td>
     </tr>
-    @foreach($sinhviens as $sinhvien)
+    @foreach($students as $student)
     <tr>
-        <td>{{$sinhvien['ID']}}</td>
-        <td>{{$sinhvien['Ten']}}</td>
-        <td>{{$sinhvien['Tuoi']}}</td>
-        <td>{{$sinhvien['Diem']}}</td>
+        <td>{{$student['ID']}}</td>
+        <td>{{$student['Name']}}</td>
+        <td>{{$student['Age']}}</td>
+        <td>{{$student['Mark']}}</td>
     </tr>
     @endforeach
 

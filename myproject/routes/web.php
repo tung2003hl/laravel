@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SinhvienController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +15,5 @@ use App\Http\Controllers\SinhvienController;
 */
 
 
-Route::get('/',[SinhvienController::class,'show']);
+Route::get('/',[StudentController::class,'show']);
 
