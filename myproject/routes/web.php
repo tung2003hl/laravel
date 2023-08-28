@@ -14,9 +14,7 @@ use App\Http\Controllers\SinhvienController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('list',[SinhvienController::class,'show']);
+
+Route::get('/',[SinhvienController::class,'show']);
 
