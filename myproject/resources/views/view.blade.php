@@ -7,6 +7,5 @@
     <title>Document</title>
 </head>
 <body>
-<h1>View đây</h1>
 </body>
 </html>
