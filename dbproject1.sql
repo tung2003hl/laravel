@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 30, 2023 at 03:42 AM
+-- Generation Time: Aug 30, 2023 at 05:56 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -28,12 +28,20 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `delivery` (
-  `Delivery_ID` int(5) NOT NULL,
-  `Order_ID` int(5) NOT NULL,
-  `Delivery_Person_ID` int(5) UNSIGNED NOT NULL,
+  `Delivery_ID` bigint(20) UNSIGNED NOT NULL,
+  `Order_ID` bigint(20) UNSIGNED NOT NULL,
+  `Delivery_Person_ID` bigint(20) UNSIGNED NOT NULL,
   `Delivery_Date` date NOT NULL,
   `Delivery_Status` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `delivery`
+--
+
+INSERT INTO `delivery` (`Delivery_ID`, `Order_ID`, `Delivery_Person_ID`, `Delivery_Date`, `Delivery_Status`) VALUES
+(1, 2, 1, '2023-08-02', 'Đang làm đơn'),
+(2, 2, 1, '2023-08-02', 'Đang làm đơn');
 
 -- --------------------------------------------------------
 
@@ -58,13 +66,21 @@ CREATE TABLE `failed_jobs` (
 --
 
 CREATE TABLE `food` (
-  `Food_ID` int(5) NOT NULL,
-  `Shop_ID` int(5) NOT NULL,
+  `Food_ID` bigint(20) UNSIGNED NOT NULL,
+  `Shop_ID` bigint(20) UNSIGNED NOT NULL,
   `Name` text NOT NULL,
   `Description` varchar(255) NOT NULL,
   `Price` int(50) NOT NULL,
   `Rate` int(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `food`
+--
+
+INSERT INTO `food` (`Food_ID`, `Shop_ID`, `Name`, `Description`, `Price`, `Rate`) VALUES
+(1, 1, 'bun cha', 'rat ngon', 500, 3),
+(2, 1, 'bun cha', 'rat ngon', 500, 3);
 
 -- --------------------------------------------------------
 
@@ -86,8 +102,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (1, '2014_10_12_000000_create_users_table', 1),
 (2, '2014_10_12_100000_create_password_resets_table', 1),
 (3, '2019_08_19_000000_create_failed_jobs_table', 1),
-(4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
-(5, '2023_08_29_084423_add_new_fields_users', 1);
+(4, '2019_12_14_000001_create_personal_access_tokens_table', 1);
 
 -- --------------------------------------------------------
 
@@ -96,12 +111,20 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `order` (
-  `Order_ID` int(5) NOT NULL,
-  `Shop_ID` int(5) NOT NULL,
-  `User_ID` int(5) UNSIGNED NOT NULL,
+  `Order_ID` bigint(20) UNSIGNED NOT NULL,
+  `Shop_ID` bigint(20) UNSIGNED NOT NULL,
+  `User_ID` bigint(20) UNSIGNED NOT NULL,
   `Order_Date` date NOT NULL,
   `Delivery_Address` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order`
+--
+
+INSERT INTO `order` (`Order_ID`, `Shop_ID`, `User_ID`, `Order_Date`, `Delivery_Address`) VALUES
+(1, 1, 1, '2023-08-02', 'ha long'),
+(2, 1, 1, '2023-08-02', 'ha long');
 
 -- --------------------------------------------------------
 
@@ -110,9 +133,9 @@ CREATE TABLE `order` (
 --
 
 CREATE TABLE `order_item` (
-  `Order_Item_ID` int(5) NOT NULL,
-  `Order_ID` int(5) NOT NULL,
-  `Food_ID` int(5) NOT NULL,
+  `Order_Item_ID` bigint(20) UNSIGNED NOT NULL,
+  `Order_ID` bigint(20) UNSIGNED NOT NULL,
+  `Food_ID` bigint(20) UNSIGNED NOT NULL,
   `quantity` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -127,13 +150,6 @@ CREATE TABLE `password_resets` (
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `password_resets`
---
-
-INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
-('phanductung03@gmail.com', '$2y$10$ng9KXFwhf.8zQow6bCy5v.qs.RMJQNE3DYYCID1jfHmlcTdc1OuJu', '2023-08-29 03:17:29');
 
 -- --------------------------------------------------------
 
@@ -161,12 +177,19 @@ CREATE TABLE `personal_access_tokens` (
 --
 
 CREATE TABLE `shop` (
-  `Shop_ID` int(5) NOT NULL,
-  `Owner_ID` int(5) UNSIGNED NOT NULL,
-  `Name` int(50) NOT NULL,
+  `Shop_ID` bigint(20) UNSIGNED NOT NULL,
+  `Owner_ID` bigint(20) UNSIGNED NOT NULL,
+  `Name` text NOT NULL,
   `Address` varchar(50) NOT NULL,
   `Phone_Num` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `shop`
+--
+
+INSERT INTO `shop` (`Shop_ID`, `Owner_ID`, `Name`, `Address`, `Phone_Num`) VALUES
+(1, 1, 'shop ngon', 'me tri', '0123456789');
 
 -- --------------------------------------------------------
 
@@ -175,25 +198,26 @@ CREATE TABLE `shop` (
 --
 
 CREATE TABLE `users` (
-  `id` int(5) UNSIGNED NOT NULL,
+  `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
+  `gender` tinyint(4) NOT NULL,
+  `mobile_no` varchar(255) DEFAULT NULL,
+  `role` tinyint(4) NOT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `gender` tinyint(4) NOT NULL DEFAULT 0,
-  `mobile_no` varchar(255) DEFAULT NULL,
-  `role` tinyint(4) NOT NULL DEFAULT 0
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `gender`, `mobile_no`, `role`) VALUES
-(8, 'tung', 'phanductung03@gmail.co', NULL, '$2y$10$FU7veja8893SS9nm/RCbwe7B.aI5HMkw2q6avYTymO8cDpd/p0z/C', NULL, '2023-08-29 03:26:04', '2023-08-29 03:26:04', 1, '1234567890', 1);
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `gender`, `mobile_no`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'tung', 'phanductung03@gmail.com', NULL, '$2y$10$.JRj2k.twDOoEWGwQBQxAeBvM6zRbmOIStG9UY4pVA6gto.NhvdDe', 1, '0123456789', 2, NULL, '2023-08-29 20:39:45', '2023-08-29 20:39:45'),
+(2, 'hung', 'fnasdas@gmail.com', NULL, '$2y$10$.CgGNyFhYIKNeCClLf8YyOd50IBVA3OzaoZM1G1IUyjQKQbQtJ69y', 1, '0123456789', 1, NULL, '2023-08-29 20:55:03', '2023-08-29 20:55:03');
 
 --
 -- Indexes for dumped tables
@@ -276,22 +300,58 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `delivery`
+--
+ALTER TABLE `delivery`
+  MODIFY `Delivery_ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `food`
+--
+ALTER TABLE `food`
+  MODIFY `Food_ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `order`
+--
+ALTER TABLE `order`
+  MODIFY `Order_ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `order_item`
+--
+ALTER TABLE `order_item`
+  MODIFY `Order_Item_ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `shop`
+--
+ALTER TABLE `shop`
+  MODIFY `Shop_ID` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
@@ -301,34 +361,34 @@ ALTER TABLE `personal_access_tokens`
 -- Constraints for table `delivery`
 --
 ALTER TABLE `delivery`
-  ADD CONSTRAINT `delivery` FOREIGN KEY (`Delivery_Person_ID`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `order` FOREIGN KEY (`Order_ID`) REFERENCES `order` (`Order_ID`);
+  ADD CONSTRAINT `FK_DeliveryUser_ID` FOREIGN KEY (`Delivery_Person_ID`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FK_Order_ID1` FOREIGN KEY (`Order_ID`) REFERENCES `order` (`Order_ID`);
 
 --
 -- Constraints for table `food`
 --
 ALTER TABLE `food`
-  ADD CONSTRAINT `shopp` FOREIGN KEY (`Shop_ID`) REFERENCES `shop` (`Shop_ID`);
+  ADD CONSTRAINT `FK_Shop_ID1` FOREIGN KEY (`Shop_ID`) REFERENCES `shop` (`Shop_ID`);
 
 --
 -- Constraints for table `order`
 --
 ALTER TABLE `order`
-  ADD CONSTRAINT `shop` FOREIGN KEY (`Shop_ID`) REFERENCES `shop` (`Shop_ID`),
-  ADD CONSTRAINT `user` FOREIGN KEY (`User_ID`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `fk_Shop_ID` FOREIGN KEY (`Shop_ID`) REFERENCES `shop` (`Shop_ID`),
+  ADD CONSTRAINT `fk_User_ID` FOREIGN KEY (`User_ID`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `order_item`
 --
 ALTER TABLE `order_item`
-  ADD CONSTRAINT `food` FOREIGN KEY (`Food_ID`) REFERENCES `food` (`Food_ID`),
-  ADD CONSTRAINT `orderr` FOREIGN KEY (`Order_ID`) REFERENCES `order` (`Order_ID`);
+  ADD CONSTRAINT `fk_Food_ID` FOREIGN KEY (`Food_ID`) REFERENCES `food` (`Food_ID`),
+  ADD CONSTRAINT `fk_Order_ID` FOREIGN KEY (`Order_ID`) REFERENCES `order` (`Order_ID`);
 
 --
 -- Constraints for table `shop`
 --
 ALTER TABLE `shop`
-  ADD CONSTRAINT `owner` FOREIGN KEY (`Owner_ID`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `fk_owner_ID` FOREIGN KEY (`Owner_ID`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
