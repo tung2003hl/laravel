@@ -25,6 +25,11 @@ return new class extends Migration
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade');
+            $table->unsignedBigInteger("food_id");
+            $table->foreign("food_id")
+                  ->references("id")
+                  ->on("food")
+                  ->onDelete("cascade");
             $table->date('order_date');
             $table->string('delivery_address');
             $table->timestamps();
@@ -38,6 +43,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('order');
     }
 };
