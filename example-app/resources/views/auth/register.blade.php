@@ -55,7 +55,7 @@
                         </div>
   
                         <div class="row mb-3">
-                            <label for="mobile_no" class="col-md-4 col-form-label text-md-end">{{ __('Mobile No.') }}</label>
+                            <label for="mobile_no" class="col-md-4 col-form-label text-md-end">{{ __('Mobile Number') }}</label>
   
                             <div class="col-md-6">
                                 <input id="mobile_no" type="text" class="form-control @error('mobile_no') is-invalid @enderror" name="mobile_no" value="{{ old('mobile_no') }}" required autocomplete="mobile_no">
@@ -69,14 +69,14 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="mobile_no" class="col-md-4 col-form-label text-md-end">{{ __('Role') }}</label>
+                            <label for="mobile_no" class="col-md-4 col-form-label text-md-end">{{ __('Type') }}</label>
   
                             <div class="col-md-6">
-                                <label><input type="radio" name="role" value="0" checked> Buyer</label>
-                                <label><input type="radio" name="role" value="1"> Seller</label>
-                                <label><input type="radio" name="role" value="2"> Transportation</label>
+                                <label><input type="radio" name="type" value="0" checked> Buyer</label>
+                                <label><input type="radio" name="type" value="1"> Seller</label>
+                                <label><input type="radio" name="type" value="2"> Shipper</label>
   
-                                @error('role')
+                                @error('type')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

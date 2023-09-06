@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th9 05, 2023 lúc 04:28 AM
+-- Thời gian đã tạo: Th9 06, 2023 lúc 12:36 PM
 -- Phiên bản máy phục vụ: 10.4.28-MariaDB
 -- Phiên bản PHP: 8.0.28
 
@@ -76,9 +76,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (3, '2019_08_19_000000_create_failed_jobs_table', 1),
 (4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
 (5, '2023_08_30_084317_create_shops_table', 1),
-(6, '2023_08_30_085733_create_orders_table', 1),
-(7, '2023_08_30_091315_create_food_table', 1),
-(8, '2023_08_30_091929_create_shippers_table', 1);
+(6, '2023_08_30_091315_create_food_table', 1),
+(7, '2023_09_01_085733_create_orders_table', 1),
+(8, '2023_09_05_091929_create_shippers_table', 1);
 
 -- --------------------------------------------------------
 
@@ -90,6 +90,7 @@ CREATE TABLE `orders` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `shop_id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED NOT NULL,
+  `food_id` bigint(20) UNSIGNED NOT NULL,
   `order_date` date NOT NULL,
   `delivery_address` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -155,9 +156,21 @@ CREATE TABLE `shops` (
   `name` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `phone_num` varchar(10) NOT NULL,
+  `main_food` varchar(255) NOT NULL,
+  `logo` varchar(255) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `shops`
+--
+
+INSERT INTO `shops` (`id`, `owner_id`, `name`, `address`, `phone_num`, `main_food`, `logo`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Musical House', 'Me Tri Ha , Ha Noi', '0123456789', 'Pizza', NULL, '2023-09-06 03:21:14', '2023-09-06 03:21:14'),
+(2, 1, 'Musical House', 'Me Tri Ha , Ha Noi', '0123456789', 'Pizza', NULL, '2023-09-06 03:22:01', '2023-09-06 03:22:01'),
+(3, 1, 'Musical House', 'Me Tri Ha , Ha Noi', '0123456789', 'Com', NULL, '2023-09-06 03:25:29', '2023-09-06 03:25:29'),
+(4, 1, 'Musical House', 'Me Tri Ha , Ha Noi', '0123456789', 'CA', NULL, '2023-09-06 03:27:32', '2023-09-06 03:27:32');
 
 -- --------------------------------------------------------
 
@@ -173,7 +186,7 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `gender` tinyint(4) NOT NULL DEFAULT 0,
   `mobile_no` varchar(255) DEFAULT NULL,
-  `role` varchar(255) NOT NULL DEFAULT 'buyer',
+  `type` int(11) NOT NULL DEFAULT 0,
   `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -183,8 +196,8 @@ CREATE TABLE `users` (
 -- Đang đổ dữ liệu cho bảng `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `gender`, `mobile_no`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'tung', 'phanductung03@gmail.com', NULL, '$2y$10$yZ9WbarEdSC/.OKmhYml6OZ7zyJnZL9ZsdmB1b18i7wKS46NNaV/S', 1, '0123456789', '2', NULL, '2023-09-04 19:17:26', '2023-09-04 19:17:26');
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `gender`, `mobile_no`, `type`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'tung', 'phanductung03@gmail.com', NULL, '$2y$10$qZc2SJ6Gp2qNKdMJjxsbNegZjLwQ3/JJ7CRRN09KZxn.gAJ2L6JZa', 0, '0123456789', 1, NULL, '2023-09-06 03:20:19', '2023-09-06 03:20:19');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -216,7 +229,8 @@ ALTER TABLE `migrations`
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
   ADD KEY `orders_shop_id_foreign` (`shop_id`),
-  ADD KEY `orders_user_id_foreign` (`user_id`);
+  ADD KEY `orders_user_id_foreign` (`user_id`),
+  ADD KEY `orders_food_id_foreign` (`food_id`);
 
 --
 -- Chỉ mục cho bảng `password_resets`
@@ -298,7 +312,7 @@ ALTER TABLE `shippers`
 -- AUTO_INCREMENT cho bảng `shops`
 --
 ALTER TABLE `shops`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `users`
@@ -320,6 +334,7 @@ ALTER TABLE `food`
 -- Các ràng buộc cho bảng `orders`
 --
 ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_food_id_foreign` FOREIGN KEY (`food_id`) REFERENCES `food` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `orders_shop_id_foreign` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 

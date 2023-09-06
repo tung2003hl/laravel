@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\SellerController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ShopController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +23,27 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+  
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
+Route::middleware(['auth', 'user-access:seller'])->group(function () {
+  
+    Route::get('/seller/home', [HomeController::class, 'sellerHome'])->name('seller.home');
+});
+
+
+Route::middleware(['auth', 'user-access:shipper'])->group(function () {
+  
+    Route::get('/shipper/home', [HomeController::class, 'shipperHome'])->name('shipper.home');
+});
+
+
+
+Route::get('/create-shop', 'App\Http\Controllers\ShopController@create')->name('create.shop');
+
+
+Route::post('/store-shop', 'App\Http\Controllers\ShopController@store')->name('store.shop');
+
+Route::post('add',[ShopController::class,'add']);
+

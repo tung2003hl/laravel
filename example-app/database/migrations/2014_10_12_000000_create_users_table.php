@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('password');
             $table->tinyInteger('gender')->default(0);
             $table->string('mobile_no')->nullable();
-            $table->string('role')->default('buyer');
+            $table->integer('type')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
