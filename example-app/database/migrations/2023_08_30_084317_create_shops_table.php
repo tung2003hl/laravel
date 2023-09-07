@@ -23,8 +23,10 @@ return new class extends Migration
             $table->String('name');
             $table->string('address');
             $table->String('phone_num',10);
+            $table->string('email')->unique();
             $table->string('main_food');
             $table->string('logo')->nullable();
+            $table->string('shop_description');
             $table->timestamps();
         });
     }

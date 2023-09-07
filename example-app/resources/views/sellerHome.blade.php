@@ -1,4 +1,4 @@
-
+@extends('layouts.app1')
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,21 +9,24 @@
 
     <style>
         /* CSS để định dạng nút Create Shop */
-        #createShopButton {
-            position: fixed;
-            left: 100px;
-            top: 100px;
-            background-color: #007BFF;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-        }
+        .button {
+    display: block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+}
+.button-container {
+    position: fixed;
+    top: 100px;
+    left: 100px;
+}
 
     </style>
 </head>
 <body>
-@extends('layouts.app')
   
   @section('content')
   <div class="container">
@@ -40,8 +43,9 @@
       </div>
   </div>
   @endsection
-  <a href="{{ route('create.shop') }}" class="btn btn-primary">Create Shop</a>
-
+  <div class="button-container">
+  <a href="{{ route('create.shop') }}" class="button">Create Shop</a>
+  </div>
     <!-- JavaScript để xử lý sự kiện khi nhấp vào nút Create Shop -->
        
 </body>

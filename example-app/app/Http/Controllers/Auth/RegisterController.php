@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
   
 class RegisterController extends Controller
 {
@@ -72,6 +74,21 @@ class RegisterController extends Controller
             'gender' => $data['gender'],
             'type' =>$data['type'],
             'password' => Hash::make($data['password']),
+            
         ]);
+        
     }
+
+    protected function registered(Request $request, $user)
+{
+    if ($user->type === 'buyer') {
+        return redirect('/buyer/home'); // Thay '/buyer/home' bằng đường dẫn trang home của buyer
+    } elseif ($user->type === 'seller') {
+        return redirect('/seller/home'); // Thay '/seller/home' bằng đường dẫn trang home của seller
+    } elseif ($user->type === 'shipper') {
+        return redirect('/shipper/home'); // Thay '/shipper/home' bằng đường dẫn trang home của shipper
+    } else {
+        return redirect($this->redirectTo);
+    }
+}
 }

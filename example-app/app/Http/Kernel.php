@@ -67,5 +67,8 @@ class Kernel extends HttpKernel
         'seller' => \App\Http\Middleware\Seller::class,
         'shipper' => \App\Http\Middleware\Shipper::class,
         'user-access' => \App\Http\Middleware\UserAccess::class,
+        'checkBuyerRole' => \App\Http\Middleware\CheckBuyerRole::class,
+        'checkSellerRole' => \App\Http\Middleware\CheckSellerRole::class,
+        'checkShipperRole' => \App\Http\Middleware\CheckShipperRole::class,
     ];
 }

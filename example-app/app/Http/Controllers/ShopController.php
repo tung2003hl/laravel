@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Shop;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 
@@ -11,12 +12,14 @@ class ShopController extends Controller
 {
     public function create()
 {
-    return view('create_shop');
+    $userId = auth()->id();
+    return view('create_shop')->with('userId',$userId);
 }
 
 public function store(Request $request)
 {
-
+    $name = $request->file('logo')->getClientOriginalName();
+    $request->file('logo')->storeAs('public/images/',$name);
 
     // Lưu dữ liệu vào cơ sở dữ liệu
     // Ví dụ: Tạo một bản ghi mới trong bảng Shop
@@ -26,16 +29,15 @@ public function store(Request $request)
     $shop->address = $request->address;
     $shop->phone_num = $request->phone_num  ;
     $shop->main_food = $request->main_food;
-
+    $shop->shop_description = $request->shop_description;
+    $shop->logo = $name;
+    $shop->email = $request->email;
     // Xử lý tập tin logo (nếu được tải lên)
-    if ($request->hasFile('logo')) {
-        $logoPath = $request->file('logo')->store('public/logos');
-        $shop->logo = $logoPath;
-    }
+    
 
     // Lưu bản ghi vào cơ sở dữ liệu 
     $shop->save();
     // Chuyển hướng hoặc trả về phản hồi tùy thuộc vào yêu cầu của bạn
-    return redirect('/seller/home');
+    return view('introduce_shop', ['shop' => $shop]);
 }
 }

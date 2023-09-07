@@ -14,6 +14,8 @@ class Shop extends Model
         'phone_num',
         'main_food',
         'logo',
+        'shop_description',
+        'email',
     ];
 
     // Define the table associated with the model
