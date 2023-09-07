@@ -6,12 +6,12 @@
                 <img src="{{ asset('storage/images/'.$shop->logo)  }}" alt="Logo" class="img-fluid">
             </div>
             <div class="col-md-6">
-                <h1>{{ $shop->name }}</h1>
-                <p>{{ $shop->shop_description }}</p>
+                <h1>{{ $shop->name }}</h1>                
                 <p><strong>Địa chỉ:</strong> {{ $shop->address }}</p>
                 <p><strong>Số điện thoại:</strong> {{ $shop->phone_num }}</p>
                 <p><strong>Món chính:</strong> {{ $shop->main_food }}</p>
                 <p><strong>Email:</strong> {{ $shop->email }}</p>
+                <p>{{ $shop->shop_description }}</p>
             </div>
         </div>
     </div>
