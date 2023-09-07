@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
+use Auth;
 use Illuminate\Http\Request;
+
 
 class HomeController extends Controller
 {
@@ -28,7 +31,11 @@ class HomeController extends Controller
 
     public function sellerHome()
     {
-        return view('sellerHome');
+
+    $userId = Auth::id(); // Lấy id của người dùng đang đăng nhập
+    $shop = Shop::where('owner_id', $userId)->get();
+
+    return view('sellerHome', ['shop' => $shop]);
     }
 
     public function shipperHome()

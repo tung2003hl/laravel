@@ -40,4 +40,15 @@ public function store(Request $request)
     // Chuyển hướng hoặc trả về phản hồi tùy thuộc vào yêu cầu của bạn
     return view('introduce_shop', ['shop' => $shop]);
 }
+public function show($id)
+{
+    $shop = Shop::find($id); // Tìm cửa hàng theo id
+
+    // Kiểm tra xem cửa hàng có tồn tại hay không
+    if (!$shop) {
+        abort(404); // Nếu không tìm thấy, hiển thị lỗi 404
+    }
+
+    return view('introduce_shop', ['shop' => $shop]);
+}
 }

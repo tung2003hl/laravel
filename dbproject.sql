@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th9 07, 2023 lúc 09:44 AM
+-- Thời gian đã tạo: Th9 07, 2023 lúc 11:23 AM
 -- Phiên bản máy phục vụ: 10.4.28-MariaDB
 -- Phiên bản PHP: 8.0.28
 
@@ -169,10 +169,8 @@ CREATE TABLE `shops` (
 --
 
 INSERT INTO `shops` (`id`, `owner_id`, `name`, `address`, `phone_num`, `email`, `main_food`, `logo`, `shop_description`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Chicken House', 'Me Tri Ha , Ha Noi', '0123456789', 'tung@gmail.com', 'Ga', 'ce5699233cbc0f142250b520d967dff7.png', 'ngon', '2023-09-06 21:24:41', '2023-09-06 21:24:41'),
-(2, 1, 'Musical House', 'Mễ trì hạ , Hà Nội', '0123456789', 'minh123@gmail.com', 'Com', 'ce5699233cbc0f142250b520d967dff7.png', 'ngon', '2023-09-07 00:01:01', '2023-09-07 00:01:01'),
-(3, 7, 'Musical House', 'Me Tri Ha , Ha Noi', '0123456789', 'hung123@gmail.com', 'Pizza', 'ce5699233cbc0f142250b520d967dff7.png', 'do an rat ngon', '2023-09-07 00:28:27', '2023-09-07 00:28:27'),
-(4, 7, 'Musical House', 'Me Tri Ha , Ha Noi', '0123456789', 'manh123@gmail.com', 'Pizza', 'background.png', '134', '2023-09-07 00:33:46', '2023-09-07 00:33:46');
+(3, 1, 'Musical House', 'Me Tri Ha , Ha Noi', '0123456789', 'tung@gmail.com', 'Pizza', 'ce5699233cbc0f142250b520d967dff7.png', 'ngon', '2023-09-07 02:15:00', '2023-09-07 02:15:00'),
+(4, 1, 'Mix Shop', 'Hà Đông , Hà Nội', '0123456789', 'tung@gmail.com', 'Mì Indomie', 'bien-tau-mi-xao-kho-indomie-chuan-vi-indo-202010301353107482.jpg', 'Rất chi là ngon', '2023-09-07 02:16:14', '2023-09-07 02:16:14');
 
 -- --------------------------------------------------------
 
@@ -199,13 +197,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `gender`, `mobile_no`, `type`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'tung', 'phanductung03@gmail.com', NULL, '$2y$10$rnhrWhTQL4JGgQoZxlba0uOg5xn9MEdYkJebyDMUfLC.FBr7Cg8t2', 1, '0123456789', 1, NULL, '2023-09-06 21:21:50', '2023-09-06 21:21:50'),
-(2, 'tung', 'phanductung03@gmail.com.vn', NULL, '$2y$10$a.8r/IYWufRQJUMe2zaW8u/HdIgyrZFELgyQ/WZ5qpmkTdeEJiSg2', 0, '1234567890', 0, NULL, '2023-09-06 21:34:04', '2023-09-06 21:34:04'),
-(3, 'hung', 'hung123@gmail.com', NULL, '$2y$10$BCU7cASXkpgAun/3niOr4u5D3WFYxwl/K0IjrdB7Yq.cQqZj2v3Jm', 0, '0123456789', 1, NULL, '2023-09-06 21:35:08', '2023-09-06 21:35:08'),
-(4, 'minh', 'minh123@gmail.com', NULL, '$2y$10$XYOZOuNoTRksh8DNCUSkkOAGvYsVS986678hctTt84Bx7gB5yhjYS', 1, '0123456789', 2, NULL, '2023-09-07 00:16:13', '2023-09-07 00:16:13'),
-(5, 'manh', 'manh123@gmail.com', NULL, '$2y$10$iMb.EGH9HgN34iz6qLO65uYLtoePoz0Yuzi1KIa.YwLnV.XokCgAS', 1, '0123456789', 2, NULL, '2023-09-07 00:22:40', '2023-09-07 00:22:40'),
-(6, 'Musical House', 'phanductung03@gmail.com.bfbgf', NULL, '$2y$10$5APZXn5Njn2tpTMBcGZnXO7AdzYNmjB0xka1rl5Lp0FOt0QCNz9Lm', 1, '1234567890', 1, NULL, '2023-09-07 00:26:44', '2023-09-07 00:26:44'),
-(7, 'Musical House', 'phanductung03@gmail.com.234214', NULL, '$2y$10$y/MgczObQtDfP0.BQvME3emNIBwPMyyLPDRZ5fAkcW.vNp9EUmvC.', 0, '1234567890', 1, NULL, '2023-09-07 00:28:10', '2023-09-07 00:28:10');
+(1, 'tung', 'phanductung03@gmail.com', NULL, '$2y$10$0H3/V7NvfgxKG39KQMxucOWSV3VW.sR6EVEoZhSKD.NKySSF7mJVa', 0, '1234567890', 1, NULL, '2023-09-07 02:14:40', '2023-09-07 02:14:40');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -267,7 +259,6 @@ ALTER TABLE `shippers`
 --
 ALTER TABLE `shops`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `shops_email_unique` (`email`),
   ADD KEY `shops_owner_id_foreign` (`owner_id`);
 
 --
@@ -327,7 +318,7 @@ ALTER TABLE `shops`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

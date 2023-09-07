@@ -44,11 +44,11 @@ Route::get('/create-shop', 'App\Http\Controllers\ShopController@create')->name('
 
 Route::post('store-shop', 'App\Http\Controllers\ShopController@store')->name('store.shop');
 
-Route::post('add',[ShopController::class,'add']);
-
 Route::get('/introduce-shop',[ShopController::class,'introduce'])->name('introduce.shop');
 
 Route::get('/buyer/home', [HomeController::class, 'index'])->name('buyer.home');
 Route::get('/seller/home', [HomeController::class, 'sellerHome'])->name('seller.home');
 Route::get('/shipper/home', [HomeController::class, 'shipperHome'])->name('shipper.home');
+
+Route::get('/introduce_shop/{id}', [ShopController::class, 'show'])->name('introduce.shop');
 
