@@ -28,9 +28,9 @@
         </div>
     </div>
 <br>
-    <h2 class="text-center">Danh sách sản phẩm</h2>
-    <br>
-    <div class="product-list">
+<br>
+<h2 class="text-center">Danh sách sản phẩm</h2>
+<div class="product-list">
     @if(isset($foods))
         @foreach ($foods as $food)
             <div class="product">
