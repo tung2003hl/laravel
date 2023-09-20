@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-Zy8Blm5ST6inBdvy5iH+2w6tSmwTcxhg1KwpbuR5AhlkP6Sm9z/+so4p9ylx1+zR" crossorigin="anonymous">
 
     <style>
         /* CSS để định dạng nút Create Shop */
@@ -25,22 +26,30 @@
 .shop-list {
             list-style: none;
             padding: 0;
+            color:#000;
         }
 
         .shop-list-item {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
+            color:#000;
         }
 
         .shop-list-item img {
             width: 50px; /* Điều chỉnh kích thước ảnh logo */
             height: 50px;
             margin-right: 10px;
+            color:#000;
         }
         .shop-link {
     text-decoration: none; /* Loại bỏ gạch chân */
     color: #000; /* Màu đen cho văn bản */
+}
+.delete-button {
+    color: #d9534f; /* Màu đỏ hoặc màu khác tùy bạn chọn */
+    text-decoration: none;
+    margin-left: 10px; /* Để tạo khoảng cách giữa nút "Delete" và cửa hàng */
 }
 
     </style>
@@ -78,6 +87,7 @@
         <li class="shop-list-item">
             <img src="{{ asset('storage/images/'.$shop->logo) }}" alt="Logo">
             <span>{{ $shop->name }}</span>
+            <a href="{{ route('delete.shop', ['id' => $shop->id]) }}" class="delete-button">Delete</a>
         </li>
     </a>
 @endforeach

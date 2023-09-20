@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 use App\Models\Shop;
 use App\Models\User;
+use App\Models\Food;
 
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\DB;
 
 class ShopController extends Controller
@@ -37,18 +37,34 @@ public function store(Request $request)
 
     // Lưu bản ghi vào cơ sở dữ liệu 
     $shop->save();
+    $foods = $shop->foods;
     // Chuyển hướng hoặc trả về phản hồi tùy thuộc vào yêu cầu của bạn
-    return view('introduce_shop', ['shop' => $shop]);
+    return view('introduce_shop', ['shop' => $shop,'foods' => $foods]);
 }
 public function show($id)
 {
-    $shop = Shop::find($id); // Tìm cửa hàng theo id
+    $shop = Shop::find($id);
 
-    // Kiểm tra xem cửa hàng có tồn tại hay không
     if (!$shop) {
-        abort(404); // Nếu không tìm thấy, hiển thị lỗi 404
+        abort(404);
     }
 
-    return view('introduce_shop', ['shop' => $shop]);
+    $foods = $shop->foods; // Lấy danh sách sản phẩm của cửa hàng
+
+    return view('introduce_shop', ['shop' => $shop, 'foods' => $foods]);
+}
+public function delete($id)
+{
+    // Tìm cửa hàng theo id và kiểm tra xem cửa hàng có tồn tại không
+    $shop = Shop::find($id);
+    if (!$shop) {
+        abort(404); // Hoặc hiển thị lỗi khác tùy theo trường hợp
+    }
+
+    // Xóa cửa hàng
+    $shop->delete();
+
+    // Chuyển hướng hoặc hiển thị thông báo xóa thành công
+    return redirect()->route('seller.home')->with('success', 'Cửa hàng đã được xóa thành công.');
 }
 }

@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'checkBuyerRole' => \App\Http\Middleware\CheckBuyerRole::class,
         'checkSellerRole' => \App\Http\Middleware\CheckSellerRole::class,
         'checkShipperRole' => \App\Http\Middleware\CheckShipperRole::class,
+        'redirect.post.to.get' => \App\Http\Middleware\RedirectPostToGet::class,
     ];
 }

@@ -20,10 +20,15 @@ return new class extends Migration
                   ->references('id')
                   ->on('shops')
                   ->onDelete('cascade');
-            $table->String('name');
-            $table->string('description');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')
+                  ->references('id')
+                  ->on('categories');
+            $table->String('name');        
             $table->float('price');
-            $table->integer('rate');
+            $table->string('image_url')->nullable();
+            $table->string('description');
+            $table->integer('rate')->default(5);
             $table->timestamps();
         });
     }

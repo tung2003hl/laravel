@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\FoodController;
 use App\Http\Controllers\SellerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ShopController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +43,9 @@ Route::middleware(['auth', 'user-access:shipper'])->group(function () {
 
 Route::get('/create-shop', 'App\Http\Controllers\ShopController@create')->name('create.shop');
 
-
+Route::middleware('redirect.post.to.get')->group(function () {
 Route::post('store-shop', 'App\Http\Controllers\ShopController@store')->name('store.shop');
-
+});
 Route::get('/introduce-shop',[ShopController::class,'introduce'])->name('introduce.shop');
 
 Route::get('/buyer/home', [HomeController::class, 'index'])->name('buyer.home');
@@ -51,4 +53,10 @@ Route::get('/seller/home', [HomeController::class, 'sellerHome'])->name('seller.
 Route::get('/shipper/home', [HomeController::class, 'shipperHome'])->name('shipper.home');
 
 Route::get('/introduce_shop/{id}', [ShopController::class, 'show'])->name('introduce.shop');
+
+Route::get('/shop/delete/{id}', [ShopController::class, 'delete'])->name('delete.shop');
+
+Route::get('/create/food/{shop_id}',[FoodController::class,'create'])->name('create.food'); 
+
+Route::post('store-food', 'App\Http\Controllers\FoodController@store')->name('store.food');
 

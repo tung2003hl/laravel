@@ -15,6 +15,52 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <style>
+        .btnnn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* Định dạng nút Log In */
+.btn-login {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #007bff;
+}
+
+/* Định dạng nút Register */
+.btn-register {
+    background-color: #007bff;
+}
+
+/* Đưa nút vào góc trên cùng bên phải */
+body {
+    position: relative;
+}
+
+.btnnn   {
+    position: absolute;
+    top: 10px;
+    right: 100px;
+}
+    </style>
 </head>
 <body>
     <div id="app">
@@ -38,15 +84,11 @@
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
+                                    <a href="{{ route('login') }}" class="btn-login">{{ __('Login') }}</a>
                             @endif
 
                             @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
+                                    <a class="btnnn btn-register" href="{{ route('register') }}">{{ __('Register') }}</a>
                             @endif
                         @else
                             <li class="nav-item dropdown">
@@ -59,8 +101,7 @@
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
-                                    </a>
-
+                                    </a>                                    
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>

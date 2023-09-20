@@ -20,4 +20,8 @@ class Shop extends Model
 
     // Define the table associated with the model
     protected $table = 'shops';
+    public function foods()
+{
+    return $this->hasMany(Food::class, 'shop_id', 'id');
+}
 }
