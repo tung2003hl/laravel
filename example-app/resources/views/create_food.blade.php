@@ -2,17 +2,17 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#price').on('input', function() {
-            // Loại bỏ tất cả dấu phân cách hiện có
-            var input = $(this).val().replace(/,/g, '');
+    $('#price').on('input', function() {
+        // Loại bỏ tất cả dấu phân cách hiện có
+        var input = $(this).val().replace(/\./g, '');
 
-            // Sử dụng regex để thêm dấu phân cách sau mỗi 3 số
-            input = input.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        // Sử dụng regex để thêm dấu chấm sau mỗi 3 số
+        input = input.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-            // Cập nhật giá trị trong input
-            $(this).val(input);
-        });
+        // Cập nhật giá trị trong input
+        $(this).val(input);
     });
+});
 </script>
 
 @section('content')

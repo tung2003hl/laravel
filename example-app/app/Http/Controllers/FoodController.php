@@ -45,6 +45,25 @@ public function store(Request $request)
     $foods = Food::where('shop_id', $request->input('shop_id'))->get();
     
     // Chuyển hướng hoặc hiển thị thông báo thành công
-    return view('introduce_shop', ['food' => $food,'shop' => $shop,'foods' => $foods]);
+    return redirect()->route('introduce.shop', ['id' => $food->shop_id])->with('success', 'Sản phẩm đã được thêm thành công.');
 }
+
+public function delete($id)
+{
+    // Tìm sản phẩm theo id và kiểm tra xem sản phẩm có tồn tại không
+    $food = Food::find($id);
+    if (!$food) {
+        abort(404); // Hoặc hiển thị lỗi khác tùy theo trường hợp
+    }
+
+    // Lấy giá trị shop_id từ sản phẩm
+    $shopId = $food->shop_id;
+
+    // Xóa sản phẩm
+    $food->delete();
+
+    // Chuyển hướng lại đến route 'introduce.shop' với thông báo thành công và shop_id
+    return redirect()->route('introduce.shop', ['id' => $shopId])->with('success', 'Sản phẩm đã được xóa thành công.');
+}
+
 }

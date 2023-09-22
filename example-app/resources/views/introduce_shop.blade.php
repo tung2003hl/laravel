@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/css.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+<style>
+    .icon-separator {
+    margin-left: 10px; /* Điều chỉnh giá trị margin-left để tạo khoảng cách mong muốn */
+}
+</style>
     
 </head>
 <body>
@@ -16,7 +22,10 @@
             <img src="{{ asset('storage/images/'.$shop->logo) }}" alt="Logo" class="img-fluid">
         </div>
         <div class="col-md-6">
-            <h1>{{ $shop->name }}</h1>
+            <h1>{{ $shop->name }}    
+            <a href="{{ route('edit.shop', ['id' => $shop->id]) }}" class="edit-icon">
+            <i class="fas fa-edit"></i>
+            </a></h1>
             <p><strong>Địa chỉ:</strong> {{ $shop->address }}</p>
             <p><strong>Số điện thoại:</strong> {{ $shop->phone_num }}</p>
             <p><strong>Món chính:</strong> {{ $shop->main_food }}</p>
@@ -33,13 +42,19 @@
 <div class="product-list">
     @if(isset($foods))
         @foreach ($foods as $food)
-            <div class="product">
-                <div class="product-image">
-                    <img src="{{ asset('storage/images/'.$food->image_url) }}" alt="{{$food->name}}">
-                </div>
-                <h2 class="product-name">{{$food->name}}</h2>
-                <p class="product-price">{{$food->price}}</p>
-            </div>
+        <div class="product">
+    <div class="product-image">
+        <img src="{{ asset('storage/images/'.$food->image_url) }}" alt="{{$food->name}}">
+    </div>
+    <h2 class="product-name">{{$food->name}}</h2>
+    <p class="product-price">{{$food->price}} $</p>
+    
+    <!-- Icon xóa sản phẩm -->
+    <a href="{{ route('delete.food', ['id' => $food->id]) }}" class="delete-icon">
+        <i class="fas fa-trash"></i>
+    </a>
+</div>
+
         @endforeach
     @endif
 </div>

@@ -20,13 +20,13 @@ use App\Http\Controllers\ShopController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Auth::routes();
 
-  
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+
 
 
 Route::middleware(['auth', 'user-access:seller'])->group(function () {
@@ -59,4 +59,12 @@ Route::get('/shop/delete/{id}', [ShopController::class, 'delete'])->name('delete
 Route::get('/create/food/{shop_id}',[FoodController::class,'create'])->name('create.food'); 
 
 Route::post('store-food', 'App\Http\Controllers\FoodController@store')->name('store.food');
+
+Route::get('/edit/food/{id}',[FoodController::class,'list'])->name('edit.product');
+
+Route::get('/food/delete/{id}', [FoodController::class, 'delete'])->name('delete.food');
+
+Route::get('/edit/shop/{id}',[ShopController::class,'list'])->name('edit.shop');
+
+Route::post('/update/shop/{id}',[ShopController::class,'update'])->name('update.shop');
 
