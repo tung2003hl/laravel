@@ -19,9 +19,12 @@ use App\Http\Controllers\ShopController;
 |
 */
 
+// Route::get('/', function () {
+//     return redirect('/login');
+// });
 Route::get('/', function () {
-    return redirect('/login');
-});
+    return view('welcome');
+ });
 
 Auth::routes();
 

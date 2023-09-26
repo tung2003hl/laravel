@@ -24,7 +24,6 @@ public function store(Request $request)
         'name' => 'required',
         'price' => 'required',
         'image_url' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        'description' => 'required',
     ]);
     $name_image = $request->file('image_url')->getClientOriginalName();
     $request->file('image_url')->storeAs('public/images/',$name_image);

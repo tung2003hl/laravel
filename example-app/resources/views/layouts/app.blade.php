@@ -12,6 +12,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -74,10 +75,32 @@ body {
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
-
-                    </ul>
+                    @auth
+                    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#" style="font-size: 16px;">
+                                    Home<span style="margin-right: 20px;"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" style="font-size: 16px;">
+                                    About<span style="margin-right: 20px;"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" style="font-size: 16px;">
+                                    Services<span style="margin-right: 20px;"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" style="font-size: 16px;">
+                                    Contact<span style="margin-right: 20px;"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    @endauth
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -91,6 +114,10 @@ body {
                                     <a class="btnnn btn-register" href="{{ route('register') }}">{{ __('Register') }}</a>
                             @endif
                         @else
+                            <div class="cart" style="margin-top:11px;margin-right:25px">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span id="cart-count">0</span> - <span id="total-price">$0.00</span>
+                            </div>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}

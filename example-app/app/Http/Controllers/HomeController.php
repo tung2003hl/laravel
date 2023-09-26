@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Shop;
 use Auth;
 use Illuminate\Http\Request;
+use App\Models\Food;
 
 
 class HomeController extends Controller
@@ -26,15 +27,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        if (auth()->check()) {
+            // Nếu đã đăng nhập, lấy danh sách sản phẩm
+            $food = Food::all(); // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
+    
+            return view('home', compact('food'));
+        } else {
+            // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+            return redirect()->route('login');
+        }
     }
 
     public function sellerHome()
     {
-
     $userId = Auth::id(); // Lấy id của người dùng đang đăng nhập
     $shop = Shop::where('owner_id', $userId)->get();
-
     return view('sellerHome', ['shop' => $shop]);
     }
 

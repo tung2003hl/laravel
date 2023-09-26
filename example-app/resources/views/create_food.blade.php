@@ -58,7 +58,7 @@
                         <br>
                         <div class="form-group">
                             <label for="shop_description">Food Description: </label>
-                            <input type="text" name="description" class="form-control" required>
+                            <input type="text" name="description" class="form-control" >
                         </div>
                         <br>
                         <button type="submit" class="btn btn-primary">Create</button>
