@@ -22,7 +22,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="shop_location">Shop Location: </label>
+                            <label for="shop_location">Location: </label>
                             <input type="text" name="address" class="form-control" id="address" required>
                         </div>
 

@@ -20,6 +20,9 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
   </style>
 </head>
 <body>
+  @php
+      $total = 0
+  @endphp
 <section class="h-100 gradient-custom">
   <div class="container py-5">
     <div class="row d-flex justify-content-center my-4">
@@ -31,10 +34,15 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
           <div class="card-body">
             <!-- Single item -->
             <div class="row">
+              @foreach($carts as $cartItem)
+              @php
+                $total +=$cartItem['price'] * $cartItem['quantity'];
+              @endphp
+
               <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                 <!-- Image -->
                 <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                  <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Vertical/12a.webp"
+                  <img style="width:220px;height:220px" src="{{ asset('storage/images/'.$cartItem['image']) }}"
                     class="w-100" alt="Blue Jeans Jacket" />
                   <a href="#!">
                     <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
@@ -45,13 +53,12 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
 
               <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                 <!-- Data -->
-                <p><strong>Blue denim shirt</strong></p>
-                <p>Color: blue</p>
-                <p>Size: M</p>
-                <button type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
-                  title="Remove item">
+                <p><strong>{{$cartItem['name']}}</strong></p>
+                <p>Price: ${{$cartItem['price']}}</p>
+                
+                <a href="#" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip" title="Remove item">
                   <i class="fas fa-trash"></i>
-                </button>
+                </a>
                 <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip"
                   title="Move to the wish list">
                   <i class="fas fa-heart"></i>
@@ -62,33 +69,39 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
               <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                 <!-- Quantity -->
                 <div class="d-flex mb-4" style="max-width: 300px">
-                  <button class="btn btn-primary px-3 me-2"
+                  <button class="btn btn-primary px-3 me-2 decrease-quantity"
                     onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
                     <i class="fas fa-minus"></i>
                   </button>
 
                   <div class="form-outline">
-                    <input id="form1" min="0" name="quantity" value="1" type="number" class="form-control" />
+                    <input id="form1" min="1" name="quantity" value="{{$cartItem['quantity']}}" type="number" class="form-control" />
                     <label class="form-label" for="form1">Quantity</label>
                   </div>
 
-                  <button class="btn btn-primary px-3 ms-2"
-                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                    <i class="fas fa-plus"></i>
-                  </button>
+                    <button class="btn btn-primary px-3 ms-2 increase-quantity"
+                      onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                      <i class="fas fa-plus"></i>
+                    </button>
                 </div>
                 <!-- Quantity -->
 
                 <!-- Price -->
-                <p class="text-start text-md-center">
-                  <strong>$17.99</strong>
+                <p id="total-price" class="text-start text-md-center">
+                  <strong>${{number_format($cartItem['price'] * $cartItem['quantity'])}}</strong>
                 </p>
                 <!-- Price -->
               </div>
+              <hr class="my-4" />
+              @endforeach
+              
+            </div>
+            <div class="pt-5">
+              <h6 class="mb-0"><a href="{{ url('/home') }}" class="text-body"><i
+                    class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
             </div>
             <!-- Single item -->
 
-            <hr class="my-4" />
           </div>
         </div>
         <div class="card mb-4">
@@ -101,7 +114,7 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
           <div class="card-body">
             <p><strong>We accept</strong></p>
             <img class="me-2" width="45px"
-              src="{{asset('https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg')}}"
+              src="asset('https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg')"
               alt="Visa" />
             <img class="me-2" width="45px"
               src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
@@ -125,7 +138,7 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
               <li
                 class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                 Products
-                <span>$53.98</span>
+                <span>{{number_format($total) }}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                 Shipping
@@ -152,5 +165,51 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
     </div>
   </div>
 </section>
+<script>
+  $(document).ready(function() {
+      // Lắng nghe sự kiện click trên nút "Trừ"
+      $('.decrease-quantity').click(function() {
+          // Lấy giá trị số lượng hiện tại
+          var quantityInput = $(this).siblings('.quantity-input');
+          var currentQuantity = parseInt(quantityInput.val());
+
+          // Giảm số lượng đi 1 đơn vị nếu nó lớn hơn 1
+          if (currentQuantity > 1) {
+              currentQuantity--;
+              quantityInput.val(currentQuantity);
+          }
+
+          // Cập nhật tổng tiền
+          updateTotalPrice(quantityInput);
+      });
+
+      // Lắng nghe sự kiện click trên nút "Cộng"
+      $('.increase-quantity').click(function() {
+          // Lấy giá trị số lượng hiện tại
+          var quantityInput = $(this).siblings('.quantity-input');
+          var currentQuantity = parseInt(quantityInput.val());
+
+          // Tăng số lượng lên 1 đơn vị
+          currentQuantity++;
+          quantityInput.val(currentQuantity);
+
+          // Cập nhật tổng tiền
+          updateTotalPrice(quantityInput);
+      });
+
+      // Hàm cập nhật tổng tiền
+      function updateTotalPrice(quantityInput) {
+          var quantity = parseInt(quantityInput.val());
+          var pricePerItem = parseFloat(quantityInput.closest('.product-quantity').data('price')); // Đặt giá tiền cho mỗi sản phẩm ở đây
+
+          // Tính tổng tiền cho sản phẩm
+          var totalPrice = quantity * pricePerItem;
+
+          // Cập nhật giá trị tổng tiền
+          var totalPriceElement = quantityInput.closest('.product-quantity').siblings('.text-start.text-md-center').find('strong');
+          totalPriceElement.text('$' + totalPrice.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')); // Định dạng số thành tiền tệ, thêm dấu ',' ngăn cách hàng nghìn
+      }
+  });
+</script>
 </body>
 </html>

@@ -30,8 +30,9 @@ class HomeController extends Controller
         if (auth()->check()) {
             // Nếu đã đăng nhập, lấy danh sách sản phẩm
             $food = Food::all(); // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
-    
-            return view('home', compact('food'));
+
+            $shopName = Shop::pluck('name','id');
+            return view('buyer.home', compact('food', 'shopName'));
         } else {
             // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
             return redirect()->route('login');
@@ -42,11 +43,11 @@ class HomeController extends Controller
     {
     $userId = Auth::id(); // Lấy id của người dùng đang đăng nhập
     $shop = Shop::where('owner_id', $userId)->get();
-    return view('sellerHome', ['shop' => $shop]);
+    return view('seller.sellerHome', ['shop' => $shop]);
     }
 
     public function shipperHome()
     {
-        return view('shipperHome');
+        return view('shipper.shipperHome');
     }
 }

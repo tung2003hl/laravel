@@ -13,6 +13,11 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Font Awesome CSS for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
@@ -114,8 +119,9 @@ body {
                                     <a class="btnnn btn-register" href="{{ route('register') }}">{{ __('Register') }}</a>
                             @endif
                         @else
-                            <div class="cart" style="margin-top:11px;margin-right:25px">
-                                    <i class="fas fa-shopping-cart"></i>
+                            <div class="cart" style="margin-top:11px;margin-right:25px;padding:0px">
+
+                                    <a href="{{route('show.cart')}}"><i class="fas fa-shopping-cart"></i></a>
                                     <span id="cart-count">0</span> - <span id="total-price">$0.00</span>
                             </div>
                             <li class="nav-item dropdown">

@@ -71,3 +71,8 @@ Route::get('/edit/shop/{id}',[ShopController::class,'list'])->name('edit.shop');
 
 Route::post('/update/shop/{id}',[ShopController::class,'update'])->name('update.shop');
 
+Route::get('/shop/{shop_id}', [ShopController::class,'view'])->name('shop.detail');
+
+Route::get('food/add-to-cart/{id}',[FoodController::class,'addToCart'])->name('addToCart');
+
+Route::get('food/cart',[FoodController::class,'showCart'])->name('show.cart');

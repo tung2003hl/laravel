@@ -13,7 +13,7 @@ class ShopController extends Controller
     public function create()
 {
     $userId = auth()->id();
-    return view('create_shop')->with('userId',$userId);
+    return view('seller.create_shop')->with('userId',$userId);
 }
 
 public function store(Request $request)
@@ -41,7 +41,7 @@ public function store(Request $request)
     $shop->save();
     $foods = $shop->foods;
     // Chuyển hướng hoặc trả về phản hồi tùy thuộc vào yêu cầu của bạn
-    return redirect()->route('introduce.shop', ['id' => $shop->id])->with('success', 'Cửa hàng đã được tạo thành công.');
+    return redirect()->route('seller.introduce.shop', ['id' => $shop->id])->with('success', 'Cửa hàng đã được tạo thành công.');
 }
 public function show($id)
 {
@@ -53,7 +53,7 @@ public function show($id)
 
     $foods = $shop->foods; // Lấy danh sách sản phẩm của cửa hàng
 
-    return view('introduce_shop', ['shop' => $shop, 'foods' => $foods]);
+    return view('seller.introduce_shop', ['shop' => $shop, 'foods' => $foods]);
 }
 public function delete($id)
 {
@@ -67,7 +67,7 @@ public function delete($id)
     $shop->delete();
 
     // Chuyển hướng hoặc hiển thị thông báo xóa thành công
-    return redirect()->route('seller.home')->with('success', 'Cửa hàng đã được xóa thành công.');
+    return redirect()->route('seller.seller.home')->with('success', 'Cửa hàng đã được xóa thành công.');
 }
 
 public function list($id)
@@ -78,7 +78,7 @@ public function list($id)
         abort(404);
     }
 
-    return view('edit_shop', ['shop' => $shop]);
+    return view('seller.edit_shop', ['shop' => $shop]);
 }
 
 public function update(Request $request, $id)
@@ -104,6 +104,18 @@ public function update(Request $request, $id)
     $shop->update($validatedData);
 
     // Chuyển hướng trở lại trang hiển thị thông tin cửa hàng
-    return redirect()->route('introduce.shop', ['id' => $shop->id])->with('success', 'Thông tin cửa hàng đã được cập nhật thành công.');
+    return redirect()->route('seller.introduce.shop', ['id' => $shop->id])->with('success', 'Thông tin cửa hàng đã được cập nhật thành công.');
 }
+public function view($shop_id)
+    {
+        // Retrieve shop details
+        $shop = Shop::findOrFail($shop_id);
+
+        // Retrieve food items related to the shop
+        $foods = Food::where('shop_id', $shop_id)->get();
+
+        // Pass the data to the shop detail view    
+        return view('buyer.shop_detail', compact('shop', 'foods'));
+
+    }
 }

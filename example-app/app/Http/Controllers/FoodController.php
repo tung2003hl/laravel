@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Food;
 use App\Models\Shop;
 use App\Models\Category;
+use Termwind\Components\Dd;
 
 class FoodController extends Controller
 {
     public function create(Request $request,$shop_id)
 {
     $categories = Category::all();
-    return view('create_food',['categories' => $categories,'shop_id' => $shop_id]);
+    return view('seller.create_food',['categories' => $categories,'shop_id' => $shop_id]);
 }
 
 public function store(Request $request)
@@ -44,7 +45,7 @@ public function store(Request $request)
     $foods = Food::where('shop_id', $request->input('shop_id'))->get();
     
     // Chuyển hướng hoặc hiển thị thông báo thành công
-    return redirect()->route('introduce.shop', ['id' => $food->shop_id])->with('success', 'Sản phẩm đã được thêm thành công.');
+    return redirect()->route('seller.introduce.shop', ['id' => $food->shop_id])->with('success', 'Sản phẩm đã được thêm thành công.');
 }
 
 public function delete($id)
@@ -62,7 +63,31 @@ public function delete($id)
     $food->delete();
 
     // Chuyển hướng lại đến route 'introduce.shop' với thông báo thành công và shop_id
-    return redirect()->route('introduce.shop', ['id' => $shopId])->with('success', 'Sản phẩm đã được xóa thành công.');
+    return redirect()->route('seller.introduce.shop', ['id' => $shopId])->with('success', 'Sản phẩm đã được xóa thành công.');
 }
-
+    public function addToCart($id)
+    {
+        $food = Food::find($id);
+        $cart = session()->get(key:'cart');
+        if(isset($cart[$id])){
+            $cart[$id]['quantity'] = $cart[$id]['quantity'] + 1;
+        } else {
+            $cart[$id]=[
+                'image' => $food->image_url,
+                'name' => $food->name,
+                'price' => $food->price,
+                'quantity' => 1
+            ];
+        }
+        session()->put('cart',$cart);
+        return response()->json([
+            'code' => 200,
+            'message =>success'
+        ], status:200);
+    }
+    public function showCart()
+    {
+        $carts = session()->get(key:'cart');
+        return view('buyer.shop_cart',compact('carts'));
+    }
 }
