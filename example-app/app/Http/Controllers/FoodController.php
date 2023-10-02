@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Category;
 use App\Models\Food;
 use App\Models\Shop;
-use App\Models\Category;
+use Illuminate\Http\Request;
 use Termwind\Components\Dd;
 
 class FoodController extends Controller
@@ -25,6 +25,7 @@ public function store(Request $request)
         'name' => 'required',
         'price' => 'required',
         'image_url' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+
     ]);
     $name_image = $request->file('image_url')->getClientOriginalName();
     $request->file('image_url')->storeAs('public/images/',$name_image);
@@ -45,7 +46,7 @@ public function store(Request $request)
     $foods = Food::where('shop_id', $request->input('shop_id'))->get();
     
     // Chuyển hướng hoặc hiển thị thông báo thành công
-    return redirect()->route('seller.introduce.shop', ['id' => $food->shop_id])->with('success', 'Sản phẩm đã được thêm thành công.');
+    return redirect()->route('introduce.shop', ['id' => $food->shop_id])->with('success', 'Sản phẩm đã được thêm thành công.');
 }
 
 public function delete($id)
@@ -63,10 +64,10 @@ public function delete($id)
     $food->delete();
 
     // Chuyển hướng lại đến route 'introduce.shop' với thông báo thành công và shop_id
-    return redirect()->route('seller.introduce.shop', ['id' => $shopId])->with('success', 'Sản phẩm đã được xóa thành công.');
+    return redirect()->route('introduce.shop', ['id' => $shopId])->with('success', 'Sản phẩm đã được xóa thành công.');
 }
     public function addToCart($id)
-    {
+    {   
         $food = Food::find($id);
         $cart = session()->get(key:'cart');
         if(isset($cart[$id])){
@@ -89,5 +90,38 @@ public function delete($id)
     {
         $carts = session()->get(key:'cart');
         return view('buyer.shop_cart',compact('carts'));
+    }
+    public function updateCart(Request $request ){
+    if($request->id && $request->quantity){
+        $carts = session()->get('cart');
+        $carts[$request->id]['quantity']=$request->quantity;
+        session()->put('cart',$carts);
+        $carts = session()->get('cart');
+        // dd($carts);
+
+
+        $cartComponent = view('buyer.components.cart_component',compact('carts')) ->render();
+        return response()->json(['cart_component' =>$cartComponent,'code'=>200],status:200); 
+
+    }
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function deleteCart(Request $request){
+        if($request->id){
+            $carts = session()->get('cart');
+            unset($carts[$request->id]);
+            session()->put('cart',$carts);
+            $carts = session()->get('cart');
+            // dd($carts);
+    
+    
+            $cartComponent = view('buyer.components.cart_component',compact('carts')) ->render();
+            return response()->json(['cart_component' =>$cartComponent,'code'=>200],status:200); 
+    
+        }
     }
 }

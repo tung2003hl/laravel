@@ -65,6 +65,8 @@
             }
         });
     }   
+
+    
     $(function () {
         $('.add-to-cart').on('click', addToCart);
     });

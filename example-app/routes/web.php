@@ -76,3 +76,7 @@ Route::get('/shop/{shop_id}', [ShopController::class,'view'])->name('shop.detail
 Route::get('food/add-to-cart/{id}',[FoodController::class,'addToCart'])->name('addToCart');
 
 Route::get('food/cart',[FoodController::class,'showCart'])->name('show.cart');
+
+Route::get('food/update-cart',[FoodController::class,'updateCart'])->name('updateCart');
+
+Route::get('food/delete-cart',[FoodController::class,'deleteCart'])->name('deleteCart');

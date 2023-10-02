@@ -41,7 +41,7 @@ public function store(Request $request)
     $shop->save();
     $foods = $shop->foods;
     // Chuyển hướng hoặc trả về phản hồi tùy thuộc vào yêu cầu của bạn
-    return redirect()->route('seller.introduce.shop', ['id' => $shop->id])->with('success', 'Cửa hàng đã được tạo thành công.');
+    return redirect()->route('introduce.shop', ['id' => $shop->id])->with('success', 'Cửa hàng đã được tạo thành công.');
 }
 public function show($id)
 {
@@ -67,7 +67,7 @@ public function delete($id)
     $shop->delete();
 
     // Chuyển hướng hoặc hiển thị thông báo xóa thành công
-    return redirect()->route('seller.seller.home')->with('success', 'Cửa hàng đã được xóa thành công.');
+    return redirect()->route('seller.home')->with('success', 'Cửa hàng đã được xóa thành công.');
 }
 
 public function list($id)
@@ -104,7 +104,7 @@ public function update(Request $request, $id)
     $shop->update($validatedData);
 
     // Chuyển hướng trở lại trang hiển thị thông tin cửa hàng
-    return redirect()->route('seller.introduce.shop', ['id' => $shop->id])->with('success', 'Thông tin cửa hàng đã được cập nhật thành công.');
+    return redirect()->route('introduce.shop', ['id' => $shop->id])->with('success', 'Thông tin cửa hàng đã được cập nhật thành công.');
 }
 public function view($shop_id)
     {

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Food;
 use App\Models\Shop;
 use Auth;
 use Illuminate\Http\Request;
-use App\Models\Food;
 
 
 class HomeController extends Controller
@@ -29,7 +30,9 @@ class HomeController extends Controller
     {
         if (auth()->check()) {
             // Nếu đã đăng nhập, lấy danh sách sản phẩm
-            $food = Food::all(); // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
+            $food = Food::join('categories', 'food.category_id', '=', 'categories.id') // Sử dụng phương thức join()
+                    ->select('food.*', 'categories.category_name') // Lấy tất cả trường từ bảng foods và cột category_name từ bảng categories
+                    ->get(); // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
 
             $shopName = Shop::pluck('name','id');
             return view('buyer.home', compact('food', 'shopName'));

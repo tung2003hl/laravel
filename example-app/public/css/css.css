@@ -55,9 +55,8 @@
 }
 
 .product-image img {
-    max-width: 100%; /* Để hình ảnh tự động co lại nếu quá lớn */
-    max-height: 200px; /* Để hình ảnh tự động co lại nếu quá cao */
-    object-fit: contain; /* Cắt hình ảnh để nó vừa với khung chứa mà không biến dạng */
+    width: 270px; /* Để hình ảnh tự động co lại nếu quá lớn */
+    height: 220px; /* Để hình ảnh tự động co lại nếu quá cao */
 }
 
 .product-name {

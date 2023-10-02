@@ -36,11 +36,11 @@
             </a>
           </div>
           <div class="card-body">
-            <a href="" class="text-reset">
+            <a href="{{ route('shop.detail', ['shop_id' => $food->shop_id]) }}" class="text-reset">
               <h5 class="card-title mb-3">{{$shopName[$food->shop_id]}}-{{$food->name}}</h5>
             </a>
             <a href="" class="text-reset">
-              <p>Category</p>
+              <p>{{$food->category_name}}</p>
             </a>
             <h6 class="mb-3">${{$food->price}}</h6>
             
