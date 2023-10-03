@@ -91,37 +91,106 @@ public function delete($id)
         $carts = session()->get(key:'cart');
         return view('buyer.shop_cart',compact('carts'));
     }
-    public function updateCart(Request $request ){
-    if($request->id && $request->quantity){
-        $carts = session()->get('cart');
-        $carts[$request->id]['quantity']=$request->quantity;
-        session()->put('cart',$carts);
-        $carts = session()->get('cart');
-        // dd($carts);
+    // public function updateCart(Request $request ){
+    // if($request->id && $request->quantity){
+    //     $carts = session()->get('cart');
+    //     $carts[$request->id]['quantity']=$request->quantity;
+    //     session()->put('cart',$carts);
+    //     $carts = session()->get('cart');
+    //     // dd($carts);
 
 
-        $cartComponent = view('buyer.components.cart_component',compact('carts')) ->render();
-        return response()->json(['cart_component' =>$cartComponent,'code'=>200],status:200); 
+    //     return redirect()->back()->with('success','Remove from Cart');
 
-    }
-    }
-    public function category()
+    // }
+    // }
+    // public function category()
+    // {
+    //     return $this->belongsTo(Category::class, 'category_id', 'id');
+    // }
+
+    // public function deleteCart(Request $request){
+    //     if($request->id){
+    //         $carts = session()->get('cart');
+    //         unset($carts[$request->id]);
+    //         session()->put('cart',$carts);
+    //         $carts = session()->get('cart');
+    //         // dd($carts);
+    
+    
+    //         $cartComponent = view('buyer.components.cart_component',compact('carts')) ->render();
+    //         return response()->json(['cart_component' =>$cartComponent,'code'=>200],status:200); 
+    
+    //     }
+    // }
+    public function updateCart(Request $request,$id )
     {
-        return $this->belongsTo(Category::class, 'category_id', 'id');
-    }
+        $food = Food::find($id);
+        $cart = session()->get('cart');
+        if($request->change_to === 'down'){     
+            if(isset($cart[$id])){
+                  if($cart[$id]['quantity']>1){
+                    $cart[$id]['quantity']--;
+                    return $this->setSessionAndReturnResponse($cart);
+                  }else{
+                    return $this->deleteCart($id);
+                  }
 
-    public function deleteCart(Request $request){
-        if($request->id){
-            $carts = session()->get('cart');
-            unset($carts[$request->id]);
-            session()->put('cart',$carts);
-            $carts = session()->get('cart');
-            // dd($carts);
-    
-    
-            $cartComponent = view('buyer.components.cart_component',compact('carts')) ->render();
-            return response()->json(['cart_component' =>$cartComponent,'code'=>200],status:200); 
-    
+            }
+        }else{
+            if($request->change_to === 'up'){
+                $cart[$id]['quantity']++;
+                return $this->setSessionAndReturnResponse($cart);
+            }
+
         }
+         
     }
+    protected function setSessionAndReturnResponse($cart)
+    {
+        session()->put('cart',$cart);
+        return redirect()->route('show.cart')->with('success',"Added to Cart");
+    }
+        // public function addToCart(Food $food){
+        //     $cart = session()->get('cart');
+        //     if(!$cart){
+        //         $cart = [
+        //             $food->id=>[
+        //                 'name' => $food->name,
+        //                 'quantity' =>1,
+        //                 'price' =>$food->price,
+        //                 'image' =>$food->image_url
+        //             ]
+        //             ];
+        //             session()->put('cart',$cart); 
+        //     }
+        //     if(isset($cart[$food->id])){
+        //         $cart[$food->id]['quantity']++;
+        //         session()->put('cart',$cart);
+        //         return redirect()->route('show.cart')->with('success',"Added to Cart");
+        //     }
+
+        //     $cart[$food->id]= [
+        //         'name' => $food->name,
+        //                 'quantity' =>1,
+        //                 'price' =>$food->price,
+        //                 'image' =>$food->image_url
+        //     ];
+
+        //     session()->get('cart',$cart);
+        //     return redirect()->route('show.cart')->with('success',"Added to Cart");
+            
+
+        // }
+        public function deleteCart($id){
+            $cart = session()->get('cart');
+            if(isset($cart[$id])){
+                unset($cart[$id]);
+                session()->put('cart',$cart);
+            }
+            return redirect()->back()->with('success','Remove from Cart');
+
+        }
+
+
 }

@@ -1,0 +1,25 @@
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    position: relative; /* Thêm thuộc tính này */
+}
+
+.search-icon {
+    position: absolute; /* Thêm thuộc tính này */
+    left: 5px; /* Thêm thuộc tính này để căn chỉnh sang bên trái */
+    top: 100%; /* Để căn giữa theo chiều dọc */
+    transform: translateY(-50%); /* Để căn giữa theo chiều dọc */
+    padding: 100px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 8px;
+    outline: none;
+}

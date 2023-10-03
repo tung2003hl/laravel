@@ -7,17 +7,21 @@
     <title>Document</title>
 </head>
 <body>
-@extends('layouts.app')
+  @extends('layouts.app')
 
 @section('content')
 <section style="background-color: #eee;">
-  <div class="text-center container py-5">
-    <h4 class="mt-4 mb-5"><strong>Bestsellers</strong></h4>
-    
+  <div class="container py-5 text-center">
+    <h1 class="display-4"><strong>Bestsellers</strong></h1>
+    <div class="search-container text-right">
+      <div class="search-icon">
+          <i class="fas fa-search"></i>
+      </div>
+      <input type="text" class="search-input" placeholder="Search...">
+    </div>
     <div class="row">
     @foreach ($food as $food)
       <div class="col-lg-4 col-md-12 mb-4">
-      
         <div class="card">
           <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
             data-mdb-ripple-color="light">
@@ -43,17 +47,15 @@
               <p>{{$food->category_name}}</p>
             </a>
             <h6 class="mb-3">${{$food->price}}</h6>
-            
           </div>
         </div>
-        
       </div>
       @endforeach
-      
     </div>
-    
   </div>
 </section>
 @endsection
+
+  
 </body>
 </html>

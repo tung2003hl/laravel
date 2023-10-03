@@ -5,11 +5,11 @@
           @php
         $total = 0
     @endphp
-          <div class="card mb-4" data-url="{{route('deleteCart')}}">
+          <div class="card mb-4">
             <div class="card-header py-3">
               <h5 class="mb-0">Cart - 2 items</h5>
             </div>
-            <div class="card-body update_cart_url" data-url="{{route('updateCart')}}">
+            <div class="card-body update_cart_url" >
               <!-- Single item -->
               @if(isset($carts))
               @foreach($carts as $id=> $cartItem)
@@ -33,7 +33,7 @@
                   <p>Price: ${{number_format($cartItem['price'])}}</p>
                   <p>{{$id}}</p>
             
-                  <a href="" data-id="{{$id}}" class="btn btn-primary btn-sm me-1 mb-2 cart_delete" data-mdb-toggle="tooltip" title="Remove item">
+                  <a href="{{route('delete.cart',[$id])}}" data-id="{{$id}}" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip" title="Remove item">
                     <i class="fas fa-trash"></i>
                   </a>
                   
@@ -51,21 +51,22 @@
                 @endphp
                 <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                   <!-- Quantity -->
+                  <form action="{{route('update.cart',$id)}}">
                   <div class="d-flex mb-4" style="max-width: 300px">
-                    <button class="btn btn-primary px-3 me-2 decrease-quantity"
-                      onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                      <i class="fas fa-minus"></i>
-                    </button>
-  
-                    <div class="form-outline">
-                      <input id="quantityInput" min="1" name="quantity" value="{{$cartItem['quantity']}}" type="number" class="form-control quantity" />
-                      <label class="form-label" for="quantityInput">Quantity</label>
-                    </div>
-  
-                      <button class="btn btn-primary px-3 ms-2 increase-quantity"
-                        onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                        <i class="fas fa-plus"></i>
-                      </button>
+                        <button type="submit" class="btn btn-primary px-3 decrease-quantity" value="down" name="change_to"
+                                onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                            <i class="fas fa-minus"></i> 
+                        </button>
+                    
+                        <div class="form-outline">
+                            <input id="quantityInput" min="1" name="quantity" value="{{$cartItem['quantity']}}" type="number" class="form-control quantity" />
+                            <label class="form-label" for="quantityInput">Quantity</label>
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary px-3 increase-quantity" value="up" name="change_to"
+                                onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                            <i class="fas fa-plus"></i>
+                        </button>
                   </div>
                   <!-- Quantity -->
   
@@ -75,6 +76,7 @@
                   </p>
                   <!-- Price -->
                 </div>
+              </form>
                 <hr class="my-4" />
                 
               </div>

@@ -77,6 +77,6 @@ Route::get('food/add-to-cart/{id}',[FoodController::class,'addToCart'])->name('a
 
 Route::get('food/cart',[FoodController::class,'showCart'])->name('show.cart');
 
-Route::get('food/update-cart',[FoodController::class,'updateCart'])->name('updateCart');
+Route::get('food/delete/{id}',[FoodController::class,'deleteCart'])->name('delete.cart');
 
-Route::get('food/delete-cart',[FoodController::class,'deleteCart'])->name('deleteCart');
+Route::get('update/quantity/{cart}',[FoodController::class,'updateCart'])->name('update.cart');
