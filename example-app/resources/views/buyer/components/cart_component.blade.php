@@ -1,3 +1,4 @@
+
 <section class="h-100 gradient-custom">
     <div class="container py-5">
       <div class="row d-flex justify-content-center my-4">
@@ -7,7 +8,7 @@
     @endphp
           <div class="card mb-4">
             <div class="card-header py-3">
-              <h5 class="mb-0">Cart - 2 items</h5>
+              <h5 class="mb-0">Cart - {{ $cartCount }} items</h5>
             </div>
             <div class="card-body update_cart_url" >
               <!-- Single item -->
@@ -41,9 +42,6 @@
                     title="Move to the wish list">
                     <i class="fas fa-heart"></i>
                   </button>
-                  <a href="" data-id="{{$id}}" class="btn btn-primary btn-sm me-1 mb-2 cart_update" data-mdb-toggle="tooltip" title="Refresh item">
-                    <i class="fas fa-sync"></i> 
-                    </a>
                   <!-- Data -->
                 </div>
                 @php
@@ -84,7 +82,7 @@
               @endif
               <div class="pt-5">
                 <h6 class="mb-0"><a href="{{ url('/home') }}" class="text-body"><i
-                      class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
+                      class="fas fa-long-arrow-alt-left me-2"></i>Continue Shopping</a></h6>
               </div>
               <!-- Single item -->
   
@@ -138,7 +136,7 @@
                       <p class="mb-0">(including VAT)</p>
                     </strong>
                   </div>
-                  <span><strong>$53.98</strong></span>
+                  <span><strong>${{number_format($total) }}</strong></span>
                 </li>
               </ul>
   

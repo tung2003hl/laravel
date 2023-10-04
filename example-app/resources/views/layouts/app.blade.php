@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Include jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{{ asset('js/app.js') }}"></script>
+
 
 <!-- Include Font Awesome CSS for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -84,25 +86,29 @@ body {
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item active">
-                                <a class="nav-link" href="#" style="font-size: 16px;">
+                                <a class="nav-link" href="{{ url('/home') }}" style="font-size: 16px;">
                                     Home<span style="margin-right: 20px;"></span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" style="font-size: 16px;">
-                                    About<span style="margin-right: 20px;"></span>
+                                <a class="nav-link" href="{{route('food.list')}}" style="font-size: 16px;">
+                                    Food<span style="margin-right: 20px;"></span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" style="font-size: 16px;">
-                                    Services<span style="margin-right: 20px;"></span>
+                                <a class="nav-link" href="{{route('drink.list')}}" style="font-size: 16px;">
+                                    Drink<span style="margin-right: 20px;"></span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" style="font-size: 16px;">
-                                    Contact<span style="margin-right: 20px;"></span>
+                                <a class="nav-link" href="{{route('flower.list')}}" style="font-size: 16px;">
+                                    Flower<span style="margin-right: 20px;"></span>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('market.list')}}" style="font-size: 16px;">
+                                    Market<span style="margin-right: 20px;"></span>
+                                </a>
                         </ul>
                     </div>
                     @endauth

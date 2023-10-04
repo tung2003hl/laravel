@@ -1,34 +1,19 @@
+const addToCartButton = document.querySelector('.add-to-cart');
 
-const decreaseButton = document.querySelector(".decrease-quantity");
-        const increaseButton = document.querySelector(".increase-quantity");
-        const quantityInput = document.getElementById("quantityInput");
-        const totalElement = document.getElementById("total");
+// Get the cart count element
+const cartCountElement = document.getElementById('cart-count');
 
-        // Giá của mỗi sản phẩm
-        const productPrice = {{$cartItem['price']}};
+// Initialize the cart count
+let cartCount = 0;
 
-        // Thiết lập giá trị ban đầu của total
-        let total = parseInt(quantityInput.value) * productPrice;
+// Add a click event listener to the button
+addToCartButton.addEventListener('click', function(event) {
+    event.preventDefault();
 
-        // Cập nhật giá trị total
-        function updateTotal() {
-            total = parseInt(quantityInput.value) * productPrice;
-            totalElement.textContent = total;
-        }
+    // You can send an AJAX request to add the item to the cart here
+    // For demonstration purposes, we'll just increase the count by 1
+    cartCount++;
 
-        // Gắn sự kiện click cho nút giảm
-        decreaseButton.addEventListener("click", () => {
-            if (total > 0) {
-                quantityInput.stepDown(0.5);
-                updateTotal();
-            }
-        });
-
-        // Gắn sự kiện click cho nút tăng
-        increaseButton.addEventListener("click", () => {
-            quantityInput.stepUp(0.5);
-            updateTotal();
-        });
-
-        // Cập nhật total khi trang web được tải lần đầu
-        updateTotal();
+    // Update the cart count display
+    cartCountElement.textContent = cartCount;
+});

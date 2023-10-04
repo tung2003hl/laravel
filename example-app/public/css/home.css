@@ -26,9 +26,3 @@
             height: 40px; /* Điều chỉnh kích thước theo mong muốn */
             font-size: 16px; /* Điều chỉnh cỡ chữ theo mong muốn */
         }
-        .center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; /* Đảm bảo nó căn giữa theo chiều dọc */
-        }
