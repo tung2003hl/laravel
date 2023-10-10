@@ -1,4 +1,4 @@
-@extends('layouts.app')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +13,8 @@
     <title>Document</title>
 </head>
 <body>
+    @extends('layouts.app')
+    @section('content')
     <div class="container mt-5 mb-5">
 
         <div class="row d-flex justify-content-center">
@@ -33,7 +35,7 @@
 
                             <h5>Your order Confirmed!</h5>
 
-                            <span class="font-weight-bold d-block mt-4">Hello, Chris</span>
+                            <span class="font-weight-bold d-block mt-4">Hello</span>
                             <span>You order has been confirmed and will be shipped in next two days!</span>
 
                             <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
@@ -46,7 +48,7 @@
                                                 <div class="py-2">
 
                                                     <span class="d-block text-muted">Order Date</span>
-                                                <span>12 Jan,2018</span>
+                                                <span>{{$order->order_date}}</span>
                                                     
                                                 </div>
                                             </td>
@@ -55,7 +57,7 @@
                                                 <div class="py-2">
 
                                                     <span class="d-block text-muted">Order No</span>
-                                                <span>MT12332345</span>
+                                                <span>{{$order->id}}</span>
                                                     
                                                 </div>
                                             </td>
@@ -73,7 +75,7 @@
                                                 <div class="py-2">
 
                                                     <span class="d-block text-muted">Shiping Address</span>
-                                                <span>414 Advert Avenue, NY,USA</span>
+                                                <span>{{$order->delivery_address}}</span>
                                                     
                                                 </div>
                                             </td>
@@ -94,54 +96,31 @@
                                 <div class="product border-bottom table-responsive">
 
                                     <table class="table table-borderless">
-
+                                        @foreach($orderDetail as $orderdetail)
                                     <tbody>
                                         <tr>
                                             <td width="20%">
                                             
-                                            <img src="https://i.imgur.com/u11K1qd.jpg" width="90">
+                                            <img src="{{ asset('storage/images/'.$orderdetail->image) }}" width="90">
 
                                         </td>
                                     
                                         <td width="60%">
-                                            <span class="font-weight-bold">Men's Sports cap</span>
+                                            <span class="font-weight-bold">{{$orderdetail->name}}</span>
                                             <div class="product-qty">
-                                                <span class="d-block">Quantity:1</span>
-                                                <span>Color:Dark</span>
+                                                <span class="d-block">Quantity:{{$orderdetail->quantity}}</span>
                                                 
                                             </div>
                                         </td>
                                         <td width="20%">
                                             <div class="text-right">
-                                                <span class="font-weight-bold">$67.50</span>
+                                                <span class="font-weight-bold">{{$orderdetail->price}}/span>
                                             </div>
                                         </td>
                                         </tr>
 
-
-                                        <tr>
-                                            <td width="20%">
-                                            
-                                            <img src="https://i.imgur.com/SmBOua9.jpg" width="70">
-
-                                        </td>
-                                    
-                                        <td width="60%">
-                                            <span class="font-weight-bold">Men's Collar T-shirt</span>
-                                            <div class="product-qty">
-                                                <span class="d-block">Quantity:1</span>
-                                                <span>Color:Orange</span>
-                                                
-                                            </div>
-                                        </td>
-                                        <td width="20%">
-                                            <div class="text-right">
-                                                <span class="font-weight-bold">$77.50</span>
-                                            </div>
-                                        </td>
-                                        </tr>
                                     </tbody> 
-                                        
+                                        @endforeach
                                     </table>
                                     
 
@@ -168,7 +147,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="text-right">
-                                                            <span>$168.50</span>
+                                                            <span>{{$order->total_price}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -184,7 +163,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="text-right">
-                                                            <span>$22</span>
+                                                            <span>$0</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -200,7 +179,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="text-right">
-                                                            <span>$7.65</span>
+                                                            <span>$0</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -216,7 +195,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="text-right">
-                                                            <span class="text-success">$168.50</span>
+                                                            <span class="text-success">{{$order->total_price}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -232,7 +211,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="text-right">
-                                                            <span class="font-weight-bold">$238.50</span>
+                                                            <span class="font-weight-bold">{{$order->total_price}}</span>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -250,7 +229,7 @@
 
                                 <p>We will be sending shipping confirmation email when the item shipped successfully!</p>
                                 <p class="font-weight-bold mb-0">Thanks for shopping with us!</p>
-                                <span>Nike Team</span>
+                                <span>Sauve Dinner Team</span>
 
 
 
@@ -261,8 +240,7 @@
 
                         <div class="d-flex justify-content-between footer p-3">
 
-                            <span>Need Help? visit our <a href="#"> help center</a></span>
-                             <span>12 June, 2020</span>
+                             <span>{{ now()->format('Y-m-d') }}</span>
                             
                         </div>
 
@@ -276,5 +254,6 @@
         </div>
         
     </div>
+    @endsection
 </body>
 </html>

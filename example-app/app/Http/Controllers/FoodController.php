@@ -7,6 +7,8 @@ use App\Models\Food;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use Termwind\Components\Dd;
+use App\Models\OrderDetail;
+use App\Models\Order;
 
 class FoodController extends Controller
 {
@@ -48,11 +50,48 @@ public function store(Request $request)
     // Chuyển hướng hoặc hiển thị thông báo thành công
     return redirect()->route('introduce.shop', ['id' => $food->shop_id])->with('success', 'Sản phẩm đã được thêm thành công.');
 }
-public function search(Request $request)
-    {
-        $searchTerm = $request->input('searchTerm');
+// public function search(Request $request)
+//     {
+        
+//         $searchTerm = $request->input('searchTerm');
 
-        // Tìm kiếm các sản phẩm có tên giống với từ khóa tìm kiếm
+//         // Tìm kiếm các sản phẩm có tên giống với từ khóa tìm kiếm
+//         $food = Food::join('categories', 'food.category_id', '=', 'categories.id')
+//         ->select('food.*', 'categories.category_name')
+//         ->where('food.name', 'like', '%' . $searchTerm . '%')
+//         ->get();
+
+//         // Trả về view hiển thị kết quả tìm kiếm
+//         $shopName = Shop::pluck('name','id');
+//         return view('buyer.home', compact('food', 'shopName'));
+//     }
+
+public function search(Request $request)
+{
+    $searchTerm = $request->input('searchTerm');
+
+    // Lấy URL hiện tại
+    $currentUrl = $request->path();
+    dd($currentUrl);    
+
+    if ($currentUrl === 'food') {
+        $food = $this->searchFood($searchTerm);
+        $shopName = Shop::pluck('name', 'id');
+        return view('buyer.home', compact('food', 'shopName'));
+    } elseif ($currentUrl === 'drink') {
+        $food = $this->searchDrink($searchTerm);
+        $shopName = Shop::pluck('name', 'id');
+        return view('buyer.home', compact('food', 'shopName'));
+    } elseif ($currentUrl === 'flower') {
+        $food = $this->searchFlower($searchTerm);
+        $shopName = Shop::pluck('name', 'id');
+        return view('buyer.home', compact('food', 'shopName'));
+    } elseif ($currentUrl === 'market') {
+        $food = $this->searchMarket($searchTerm);
+        $shopName = Shop::pluck('name', 'id');
+        return view('buyer.home', compact('food', 'shopName'));
+    } else {
+        // Xử lý các localhost khác nếu cần
         $food = Food::join('categories', 'food.category_id', '=', 'categories.id')
         ->select('food.*', 'categories.category_name')
         ->where('food.name', 'like', '%' . $searchTerm . '%')
@@ -62,6 +101,58 @@ public function search(Request $request)
         $shopName = Shop::pluck('name','id');
         return view('buyer.home', compact('food', 'shopName'));
     }
+}
+
+private function searchFood($searchTerm)
+{
+    // Thực hiện tìm kiếm sản phẩm trong localhost '/food'
+    $food = Food::join('categories', 'food.category_id', '=', 'categories.id')
+    ->select('food.*', 'categories.category_name')
+    ->where('food.name', 'like', '%' . $searchTerm . '%')
+    ->where('food.category_id', '=', 1)
+    ->get();
+
+    
+    return $food;
+}
+
+private function searchDrink($searchTerm)
+{
+    // Thực hiện tìm kiếm sản phẩm trong localhost '/drink'
+    $food = Food::join('categories', 'food.category_id', '=', 'categories.id')
+    ->select('food.*', 'categories.category_name')
+    ->where('food.name', 'like', '%' . $searchTerm . '%')
+    ->where('food.category_id', '=', 2)
+    ->get();
+    
+    return $food;
+}
+
+private function searchMarket($searchTerm)
+{
+    // Thực hiện tìm kiếm sản phẩm trong localhost '/drink'
+    $food = Food::join('categories', 'food.category_id', '=', 'categories.id')
+    ->select('food.*', 'categories.category_name')
+    ->where('food.name', 'like', '%' . $searchTerm . '%')
+    ->where('food.category_id', '=', 4)
+    ->get();
+    
+    return $food;
+}
+
+private function searchFlower($searchTerm)
+
+{
+    // Thực hiện tìm kiếm sản phẩm trong localhost '/drink'
+    $food = Food::join('categories', 'food.category_id', '=', 'categories.id')
+    ->select('food.*', 'categories.category_name')
+    ->where('food.name', 'like', '%' . $searchTerm . '%')
+    ->where('food.category_id', '=', 3)
+    ->get();
+    
+    return $food;
+}
+
 
 public function delete($id)
 {
@@ -88,6 +179,7 @@ public function delete($id)
             $cart[$id]['quantity'] = $cart[$id]['quantity'] + 1;
         } else {
             $cart[$id]=[
+                'id'=>$id,
                 'image' => $food->image_url,
                 'name' => $food->name,
                 'price' => $food->price,

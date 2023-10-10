@@ -26,12 +26,9 @@ return new class extends Migration
                   ->on('users')
                   ->onDelete('cascade');
             $table->unsignedBigInteger("food_id");
-            $table->foreign("food_id")
-                  ->references("id")
-                  ->on("food")
-                  ->onDelete("cascade");
             $table->date('order_date');
             $table->string('delivery_address');
+            $table->float('total_price');
             $table->timestamps();
         });
     }
