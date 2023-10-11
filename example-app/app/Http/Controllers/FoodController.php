@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Food;
 use App\Models\Shop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Termwind\Components\Dd;
 use App\Models\OrderDetail;
 use App\Models\Order;
@@ -71,22 +72,21 @@ public function search(Request $request)
     $searchTerm = $request->input('searchTerm');
 
     // Lấy URL hiện tại
-    $currentUrl = $request->path();
-    dd($currentUrl);    
+    $previousUrl = session('previous_url');   
 
-    if ($currentUrl === 'food') {
+    if ($previousUrl === '/food') {
         $food = $this->searchFood($searchTerm);
         $shopName = Shop::pluck('name', 'id');
         return view('buyer.home', compact('food', 'shopName'));
-    } elseif ($currentUrl === 'drink') {
+    } elseif ($previousUrl === '/drink') {
         $food = $this->searchDrink($searchTerm);
         $shopName = Shop::pluck('name', 'id');
         return view('buyer.home', compact('food', 'shopName'));
-    } elseif ($currentUrl === 'flower') {
+    } elseif ($previousUrl === '/flower') {
         $food = $this->searchFlower($searchTerm);
         $shopName = Shop::pluck('name', 'id');
         return view('buyer.home', compact('food', 'shopName'));
-    } elseif ($currentUrl === 'market') {
+    } elseif ($previousUrl === '/market') {
         $food = $this->searchMarket($searchTerm);
         $shopName = Shop::pluck('name', 'id');
         return view('buyer.home', compact('food', 'shopName'));

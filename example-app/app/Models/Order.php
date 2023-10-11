@@ -19,4 +19,8 @@ class Order extends Model
         'note'
     ];
     protected $table = 'orders';
+    public function orderDetails()
+{
+    return $this->hasMany(OrderDetail::class);
+}
 }

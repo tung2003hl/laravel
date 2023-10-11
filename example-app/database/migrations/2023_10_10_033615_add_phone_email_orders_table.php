@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->string('phone_no')->nullable();
-            $table->string('email')->unique();
+            $table->string('email');
         });
     }
 

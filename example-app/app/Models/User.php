@@ -51,4 +51,8 @@ class User extends Authenticatable
             get: fn ($value) =>  ["buyer", "seller", "shipper"][$value],
         );
     }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

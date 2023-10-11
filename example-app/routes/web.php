@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -71,7 +72,9 @@ Route::get('/checkout', [OrderController::class,'index'])->name('checkout');
 Route::post('/vnpay_payment', [OrderController::class,'vnpay_payment'])->name('vnpay.payment');
 Route::post('/place-order', [OrderController::class,'store'])->name('place.order');
 
-
+//route profile
+Route::get('/profile',[ProfileController::class,'show'])->name('show.profile');
+Route::get('/order/detail/{order_id}',[ProfileController::class,'show_detail'])->name('order.detail');
 
 
 

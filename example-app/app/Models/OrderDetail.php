@@ -14,4 +14,8 @@ class OrderDetail extends Model
         'price',        
     ];
     protected $table = 'order_detail';
+    public function food()
+    {
+        return $this->belongsTo(Food::class, 'food_id', 'id');
+    }
 }

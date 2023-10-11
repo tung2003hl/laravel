@@ -22,4 +22,5 @@ class Food extends Model
         return $this->belongsTo(Shop::class,'shop_id');
     }   
     // Define the table associated with the model
+
 }

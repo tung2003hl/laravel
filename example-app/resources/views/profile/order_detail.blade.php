@@ -11,6 +11,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/transaction_history.css') }}">
 </head>
 <body>
+    @extends('layouts.app')
+    @section('content')
     <div class="container-fluid my-5  d-flex  justify-content-center">
         <div class="card card-1">
             <div class="card-header bg-white">
@@ -23,19 +25,19 @@
                     <div class="col-auto"> <h6 class="color-1 mb-0 change-color">Receipt</h6> </div>
                     <div class="col-auto  "> <small>Receipt Voucher : 1KAU9-84UIL</small> </div>
                 </div>
-                @foreach($orderdetail as $orderdetail)
+                @foreach($orderDetail as $orderdetail)
                 <div class="row">
                     <div class="col">
                         <div class="card card-2">
                             <div class="card-body">
                                 <div class="media">
-                                    <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="https://i.imgur.com/RJOW4BL.jpg" width="135" height="135" /> </div>
+                                    <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="{{ asset('storage/images/'.$orderdetail->image) }}" width="135" height="135" /> </div>
                                     <div class="media-body my-auto text-right">
                                         <div class="row  my-auto flex-column flex-md-row">
                                             <div class="col my-auto"> <h6 class="mb-0">{{$orderdetail->name}}</h6>  </div>
                                             <div class="col my-auto"> <small></small></div>
                                             <div class="col my-auto"> <small>Quantity : {{$orderdetail->quantity}}</small></div>
-                                            <div class="col my-auto"><h6 class="mb-0">&#8377;{{$orderdetail->price}}</h6>
+                                            <div class="col my-auto"><h6 class="mb-0">${{$orderdetail->price}}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -60,7 +62,7 @@
                 <div class="row mt-4">
                     <div class="col">
                         <div class="row justify-content-between">
-                            <div class="col-auto"><p class="mb-1 text-dark"><b>Order Details</b></p></div>
+                            <div class="col-auto"><p class="mb-1 text-dark"><b>Order Details</b></p></div><br><br>
                             <div class="flex-sm-col text-right col"> <p class="mb-1"><b>Total</b></p> </div>
                             <div class="flex-sm-col col-auto"> <p class="mb-1">${{$order->total_price}}</p> </div>
                         </div>
@@ -85,7 +87,6 @@
             <div class="card-footer">
                 <div class="jumbotron-fluid">
                     <div class="row justify-content-between ">
-                        <div class="col-sm-auto col-auto my-auto"><img class="img-fluid my-auto align-self-center " src="https://i.imgur.com/7q7gIzR.png" width="115" height="115"></div>
                         <div class="col-auto my-auto "><h2 class="mb-0 font-weight-bold">TOTAL PAID</h2></div>
                         <div class="col-auto my-auto ml-auto"><h1 class="display-3 ">${{$order->total_price}}</h1></div>
                     </div>
@@ -98,5 +99,6 @@
             </div>
         </div>
     </div>
+    @endsection
 </body>
 </html>

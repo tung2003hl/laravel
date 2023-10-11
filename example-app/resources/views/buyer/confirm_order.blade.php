@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,8 +34,8 @@
 
                             <h5>Your order Confirmed!</h5>
 
-                            <span class="font-weight-bold d-block mt-4">Hello</span>
-                            <span>You order has been confirmed and will be shipped in next two days!</span>
+                            <span class="font-weight-bold d-block mt-4">Hello,{{$user->name}}</span>
+                            <span>You order has been confirmed and will be shipped in next few days!</span>
 
                             <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
 
@@ -66,7 +65,7 @@
                                                 <div class="py-2">
 
                                                     <span class="d-block text-muted">Payment</span>
-                                                <span><img src="https://img.icons8.com/color/48/000000/mastercard.png" width="20" /></span>
+                                                <span>COD</span>
                                                     
                                                 </div>
                                             </td>
@@ -94,9 +93,8 @@
 
 
                                 <div class="product border-bottom table-responsive">
-
+                                    @foreach($orderDetails as $orderdetail)
                                     <table class="table table-borderless">
-                                        @foreach($orderDetail as $orderdetail)
                                     <tbody>
                                         <tr>
                                             <td width="20%">
@@ -114,15 +112,15 @@
                                         </td>
                                         <td width="20%">
                                             <div class="text-right">
-                                                <span class="font-weight-bold">{{$orderdetail->price}}/span>
+                                                <span class="font-weight-bold">${{$orderdetail->price}}</span>
                                             </div>
                                         </td>
                                         </tr>
 
                                     </tbody> 
-                                        @endforeach
+                                        
                                     </table>
-                                    
+                                    @endforeach
 
 
                                 </div>

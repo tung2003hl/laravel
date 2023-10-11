@@ -135,9 +135,12 @@ class OrderController extends Controller
             $orderDetail->image = $carts['image'];
             $orderDetail->save();
         }
+        $order = Order::where('user_id', $user_id)->latest()->first();
+        $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+
         
         // Sau khi lưu dữ liệu, có thể thực hiện các tác vụ khác như chuyển hướng hoặc thông báo thành công
-        return view('buyer.confirm_order', compact('order', 'orderDetail'));
+        return view('buyer.confirm_order', compact('order', 'orderDetails','user'));
     
     
 }
