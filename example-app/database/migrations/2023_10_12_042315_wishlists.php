@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->string('phone_no');
-            $table->string('email');
-            $table->string('status');
+        Schema::create('wishlists',function(Blueprint $table){
+            $table->id();
+            $table->integer('user_id');
+            $table->integer('food_id');
+            $table->timestamps();
         });
     }
 
@@ -27,9 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('phone_no');
-            $table->dropColumn('email');
-        });
+        //
     }
 };

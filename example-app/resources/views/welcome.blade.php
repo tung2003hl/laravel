@@ -1,102 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/transaction_history.css') }}">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Google Maps JavaScript API</title>
+<script src="http://maps.google.com/maps?file=api&v=2&key=ABQIAAAA7j_Q-rshuWkc8HyFI4V2HxQYPm-xtd00hTQOC0OXpAMO40FHAxT29dNBGfxqMPq5zwdeiDSHEPL89A" type="text/javascript"></script>
+<script language="javascript">
+var geocoder, location1, location2;
+function initialize() {
+geocoder = new GClientGeocoder();
+}
+function showLocation() {
+geocoder.getLocations(document.forms[0].address1.value, function (response) {
+if (!response || response.Status.code != 200)
+{
+alert("Sorry, we were unable to geocode the first address");
+}
+else
+{
+location1 = {lat: response.Placemark[0].Point.coordinates[1], lon: response.Placemark[0].Point.coordinates[0], address: response.Placemark[0].address};
+geocoder.getLocations(document.forms[0].address2.value, function (response) {
+if (!response || response.Status.code != 200)
+{
+alert("Sorry, we were unable to geocode the second address");
+}
+else
+{
+location2 = {lat: response.Placemark[0].Point.coordinates[1], lon: response.Placemark[0].Point.coordinates[0], address: response.Placemark[0].address};
+calculateDistance();
+}
+});
+}
+});
+}
+ 
+function calculateDistance()
+{
+try
+{
+var glatlng1 = new GLatLng(location1.lat, location1.lon);
+var glatlng2 = new GLatLng(location2.lat, location2.lon);
+var miledistance = glatlng1.distanceFrom(glatlng2, 3959).toFixed(1);
+var kmdistance = (miledistance * 1.609344).toFixed(1);
+ 
+document.getElementById(‘results’).innerHTML = ‘<strong>Địa chỉ 1: </strong>’ + location1.address + ‘<br /><strong>Địa chỉ 2: </strong>’ + location2.address + ‘<br /><strong>Khoảng cánh: </strong>’ + miledistance + ‘ miles (or ‘ + kmdistance + ‘ km)’;
+}
+catch (error)
+{
+alert(error);
+}
+}
+ 
+</script>
 </head>
-<body>
-    <div class="container-fluid my-5  d-flex  justify-content-center">
-        <div class="card card-1">
-            <div class="card-header bg-white">
-                <div class="media flex-sm-row flex-column-reverse justify-content-between  ">
-                    <div class="col my-auto"> <h4 class="mb-0">Thanks for your Order<span class="change-color"></span> !</h4> </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row justify-content-between mb-3">
-                    <div class="col-auto"> <h6 class="color-1 mb-0 change-color">Receipt</h6> </div>
-                    <div class="col-auto  "> <small>Receipt Voucher : 1KAU9-84UIL</small> </div>
-                </div>
-                @foreach($orderdetail as $orderdetail)
-                <div class="row">
-                    <div class="col">
-                        <div class="card card-2">
-                            <div class="card-body">
-                                <div class="media">
-                                    <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="https://i.imgur.com/RJOW4BL.jpg" width="135" height="135" /> </div>
-                                    <div class="media-body my-auto text-right">
-                                        <div class="row  my-auto flex-column flex-md-row">
-                                            <div class="col my-auto"> <h6 class="mb-0">{{$orderdetail->name}}</h6>  </div>
-                                            <div class="col my-auto"> <small></small></div>
-                                            <div class="col my-auto"> <small>Quantity : {{$orderdetail->quantity}}</small></div>
-                                            <div class="col my-auto"><h6 class="mb-0">&#8377;{{$orderdetail->price}}</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr class="my-3 ">
-                                <div class="row">
-                                    <div class="col-md-3 mb-3"> <small> Track Order <span><i class=" ml-2 fa fa-refresh"  aria-hidden="true"></i></span></small> </div>
-                                    <div class="col mt-auto">
-                                        <div class="progress my-auto"> <div class="progress-bar progress-bar  rounded" style="width: 62%" role="progressbar" aria-valuenow="25" aria-valuemin="0"  aria-valuemax="100"></div> </div>
-                                        <div class="media row justify-content-between ">
-                                            <div class="col-auto text-right"><span> <small  class="text-right mr-sm-2"></small> <i class="fa fa-circle active"></i> </span></div>
-                                            <div class="flex-col"> <span> <small class="text-right mr-sm-2">Out for delivary</small><i class="fa fa-circle active"></i></span></div>
-                                            <div class="col-auto flex-col-auto"><small  class="text-right mr-sm-2">Delivered</small><span> <i  class="fa fa-circle"></i></span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-                <div class="row mt-4">
-                    <div class="col">
-                        <div class="row justify-content-between">
-                            <div class="col-auto"><p class="mb-1 text-dark"><b>Order Details</b></p></div>
-                            <div class="flex-sm-col text-right col"> <p class="mb-1"><b>Total</b></p> </div>
-                            <div class="flex-sm-col col-auto"> <p class="mb-1">${{$order->total_price}}</p> </div>
-                        </div>
-                        <div class="row justify-content-between">
-                            <div class="flex-sm-col text-right col"><p class="mb-1"> <b>Discount</b></p> </div>
-                            <div class="flex-sm-col col-auto"><p class="mb-1">$0</p></div>
-                        </div>
-                        <div class="row justify-content-between">
-                            <div class="flex-sm-col text-right col"><p class="mb-1"><b></b></p></div>
-                            <div class="flex-sm-col col-auto"><p class="mb-1"></p></div>
-                        </div>
-                        <div class="row justify-content-between">
-                            <div class="flex-sm-col text-right col"><p class="mb-1"><b>Delivery Charges</b></p></div>
-                            <div class="flex-sm-col col-auto"><p class="mb-1">Free</p></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row invoice ">
-                    <div class="col"><p class="mb-1"> Order Number : {{$order->id}}</p><p class="mb-1">Order Date : {{$order->order_date}}</p><p class="mb-1"></p></div>
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="jumbotron-fluid">
-                    <div class="row justify-content-between ">
-                        <div class="col-sm-auto col-auto my-auto"><img class="img-fluid my-auto align-self-center " src="https://i.imgur.com/7q7gIzR.png" width="115" height="115"></div>
-                        <div class="col-auto my-auto "><h2 class="mb-0 font-weight-bold">TOTAL PAID</h2></div>
-                        <div class="col-auto my-auto ml-auto"><h1 class="display-3 ">${{$order->total_price}}</h1></div>
-                    </div>
-                    <div class="row mb-3 mt-3 mt-md-0">
-                        <div class="col-auto border-line"> <small class="text-white">PAN:AA02hDW7E</small></div>
-                        <div class="col-auto border-line"> <small class="text-white">CIN:UMMC20PTC </small></div>
-                        <div class="col-auto "><small class="text-white">GSTN:268FD07EXX </small> </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+ 
+<body onload="initialize()">
+ 
+<form action="#" onsubmit="showLocation(); return false;">
+<p>
+<input type="text" name="address1" value="Address 1" class="address_input" size="40" />
+<input type="text" name="address2" value="Address 2" class="address_input" size="40" />
+<input type="submit" name="find" value="Search" />
+</p>
+</form>
+<p id="results"></p>
 </body>
 </html>

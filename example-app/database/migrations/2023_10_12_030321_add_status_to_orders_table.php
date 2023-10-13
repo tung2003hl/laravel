@@ -14,9 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('phone_no');
-            $table->string('email');
-            $table->string('status');
+            $table->string('status')->default('Processing');
         });
     }
 
@@ -28,8 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('phone_no');
-            $table->dropColumn('email');
+            //
         });
     }
 };

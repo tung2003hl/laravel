@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
+            $table->float('total_price');
             $table->string('receiver_name')->after('user_id');
             $table->string('note')->after('total_price');
         });

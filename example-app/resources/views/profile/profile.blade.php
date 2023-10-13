@@ -71,7 +71,7 @@
                                 alt="">
                             <div class="d-flex align-items-center mt-2">
                                 <div class="tag">Orders placed</div>
-                                <div class="ms-auto number">0</div>
+                                <div class="ms-auto number">{{$totalQuantity}}</div>
                             </div>
                         </div>
                         <div class="box me-4 my-1 bg-light">
@@ -79,7 +79,7 @@
                                 alt="">
                             <div class="d-flex align-items-center mt-2">
                                 <div class="tag">Items in Cart</div>
-                                <div class="ms-auto number">10</div>
+                                <div class="ms-auto number">{{$cartCount}}</div>
                             </div>
                         </div>
                         <div class="box me-4 my-1 bg-light">
@@ -87,7 +87,7 @@
                                 alt="">
                             <div class="d-flex align-items-center mt-2">
                                 <div class="tag">Wishlist</div>
-                                <div class="ms-auto number">10</div>
+                                <div class="ms-auto number"></div>
                             </div>
                         </div>
                     </div>                                          
@@ -100,7 +100,7 @@
                                 <div class="d-flex flex-column justify-content-between order-summary">
                                     <div class="d-flex align-items-center">
                                         <div class="text-uppercase">Order #{{$order->id}}</div>
-                                        <div class="blue-label ms-auto text-uppercase">paid</div>
+                                        <div class="blue-label ms-auto text-uppercase">COD</div>
                                     </div>
                                     <div class="fs-8">{{ $order->orderDetails->first()->food->shop->name }}</div>
                                     <div class="fs-8">{{$order->order_date}}</div>
@@ -117,7 +117,7 @@
                             </div>
                             <div class="col-lg-8">
                                 <div class="d-sm-flex align-items-sm-start justify-content-sm-between">
-                                    <div class="status">Status : </div>
+                                    <div class="status">Status :{{$order->status}} </div>
                                     <a href="{{ route('order.detail', ['order_id' => $order->id]) }}"><div class="btn btn-primary text-uppercase">order info</div></a>
                                 </div>
                                 <div class="progressbar-track">

@@ -37,13 +37,16 @@
                         <img src="{{ asset('storage/images/'.$food->image_url) }}" alt="{{$food->name}}">
                     </div>
                     <h2 class="product-name">{{$food->name}}</h2>
-                    <p class="product-price">{{ $food->price }} $</p> 
+                    <p class="product-price">{{ $food->price }} $</p>
+                    <a href="#" class="add-to-cart">
+                        <i class="fas fa-heart text-danger fa-2x"></i>
+                    </a>
+                    
                     <a href="#" data-url="{{ route('addToCart', ['id' => $food->id]) }}" class="add-to-cart"><i class="fas fa-plus-circle text-danger fa-2x"></i></a>
                 </div>
             @endforeach
         @endif
     </div>
-    <span id="cart-count">0</span>
 </div>
 @endsection
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>

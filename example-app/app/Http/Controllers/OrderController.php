@@ -26,17 +26,85 @@ class OrderController extends Controller
         return redirect()->back()->with('message', 'Không có sản phẩm trong giỏ hàng.');
     }
 }
-    public function vnpay_payment(){
-        $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    $vnp_Returnurl = "https://localhost/vnpay_php/vnpay_return.php";
+public function execPostRequest($url, $data)
+{
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data))
+    );
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    //execute post
+    $result = curl_exec($ch);
+    //close connection
+    curl_close($ch);
+    return $result;
+}
+
+    public function momo_payment(Request $request){
+
+
+
+        $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create"; 
+
+
+        $partnerCode = 'MOMOBKUN20180529';
+        $accessKey = 'klm05TvNBzhg7h7j';
+        $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+        $orderInfo = "Thanh toán qua ATM MoMo";
+        $amount = "10000";
+        $orderId = time() . "";
+        $redirectUrl = "http://localhost/checkout";
+        $ipnUrl = "http://localhost/checkout";
+        $extraData = "";
+        
+        
+        
+            $requestId = time() . "";
+            $requestType = "payWithATM";
+            // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
+            //before sign HMAC SHA256 signature
+            $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+            $signature = hash_hmac("sha256", $rawHash, $secretKey);
+            $data = array('partnerCode' => $partnerCode,
+                'partnerName' => "Test",
+                "storeId" => "MomoTestStore",
+                'requestId' => $requestId,
+                'amount' => $amount,
+                'orderId' => $orderId,
+                'orderInfo' => $orderInfo,
+                'redirectUrl' => $redirectUrl,
+                'ipnUrl' => $ipnUrl,
+                'lang' => 'vi',
+                'extraData' => $extraData,
+                'requestType' => $requestType,
+                'signature' => $signature);
+            $result = $this->execPostRequest($endpoint, json_encode($data));
+            $jsonResult = json_decode($result, true);  // decode json
+        
+            //Just a example, please check more in there
+            return redirect()->to($jsonResult['payUrl']);
+            // header('Location: ' . $jsonResult['payUrl']);
+        }
+                    
+                
+    public function vnpay_payment(Request $request){
+    $data = $request->all();
+    $code_cart= rand(00,9999);
+     $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+    $vnp_Returnurl = "http://localhost/checkout";
     $vnp_TmnCode = "8TD5FYOP";//Mã website tại VNPAY 
     $vnp_HashSecret = "RIVTPCSJCEMHVLEETAMAEZXMSRYGZTQZ"; //Chuỗi bí mật
     
-    $vnp_TxnRef = '1256'; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này 
-    $vnp_OrderInfo = 'Thanh toán đơn hàng';
+    $vnp_TxnRef = $code_cart; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này 
+    $vnp_OrderInfo = 'Thanh toán đơn hàng test';
     $vnp_OrderType = 'billpayment';
-    $vnp_Amount = 20000 * 100;
-    $vnp_Locale = 'vn';
+    $vnp_Amount = ($data['total']) *100000;
+    $vnp_Locale = 'VN';
     $vnp_BankCode = 'NCB';
     $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
     $inputData = array(
@@ -137,6 +205,8 @@ class OrderController extends Controller
         }
         $order = Order::where('user_id', $user_id)->latest()->first();
         $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+        session()->forget('cart');
+        
 
         
         // Sau khi lưu dữ liệu, có thể thực hiện các tác vụ khác như chuyển hướng hoặc thông báo thành công

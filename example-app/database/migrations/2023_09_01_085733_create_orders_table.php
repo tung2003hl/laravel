@@ -27,8 +27,7 @@ return new class extends Migration
                   ->onDelete('cascade');
             $table->unsignedBigInteger("food_id");
             $table->date('order_date');
-            $table->string('delivery_address');
-            $table->float('total_price');
+            $table->string('delivery_address'); 
             $table->timestamps();
         });
     }

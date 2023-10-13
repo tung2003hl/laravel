@@ -30,12 +30,10 @@
     <div class="search-container center">
       <!-- Biểu tượng tìm kiếm -->
       <div class="search-icon">
-          <a href="#" id="searchButton"><i class="fas fa-search"></i></a>
+          <a href="#" id="searchButton"><i style="color: blue" class="fas fa-search"></i></a>
       </div>
       <!-- Form tìm kiếm -->
-      <form action="{{ route('food.search') }}" method="GET" id="searchForm">
-          <input type="text" class="search-input" name="searchTerm" placeholder="Tìm kiếm...">
-      </form>
+      <input type="text" class="search-input" name="searchTerm" placeholder="Tìm kiếm...">
   </div>
   
     <div class="row">

@@ -1,28 +1,21 @@
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Thêm dòng này để căn giữa theo chiều ngang */
+    padding: 5px;
+    border-radius: 5px;
+}
 
-        /* CSS để tạo giao diện cho ô tìm kiếm */
-        .search-container {
-            display: flex;
-            align-items: center;
-            border: 1px solid #ccc;
-            padding: 5px;
-            border-radius: 5px;
-        }
+.search-input {
+    border: none;
+    outline: none;
+    height: 40px;
+    width: 600px;
+}
 
-        .search-input {
-            flex: 1;
-            border: none;
-            outline: none;
-            width: 400px;
-        }
-
-        .search-icon {
-            padding: 5px;
-            background-color: #ccc;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-        }
-        .search-input-large {
-            width: 300px; /* Điều chỉnh kích thước theo mong muốn */
-            height: 40px; /* Điều chỉnh kích thước theo mong muốn */
-            font-size: 16px; /* Điều chỉnh cỡ chữ theo mong muốn */
-        }
+.search-icon {
+    padding: 5px;
+    background-color: #ccc;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}

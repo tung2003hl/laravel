@@ -17,10 +17,16 @@ class ProfileController extends Controller
     public function show()
 {
     $user = auth()->user();
+    $cartCount = $this->getCartCount();
+    
 
     if (!$user) {
         return abort(404);
     }
+    $orderIds = $user->orders->pluck('id')->unique()->toArray();
+
+    // Đếm số lượng id đơn đặt hàng duy nhất
+    $totalQuantity = count($orderIds);
 
     $orders = $user->orders;
 
@@ -29,7 +35,20 @@ class ProfileController extends Controller
     
 
     // Sử dụng hàm compact để truyền các biến vào view
-    return view('profile.profile', compact('user', 'orders'));
+    return view('profile.profile', compact('user', 'orders','cartCount','totalQuantity'));
+}
+public function getCartCount()
+{
+    $cart = session()->get('cart');
+    $totalQuantity = 0;
+
+    if ($cart) {
+        foreach ($cart as $item) {
+            $totalQuantity += $item['quantity'];
+        }
+    }
+
+    return $totalQuantity;
 }
     
     public function show_detail($order_id){

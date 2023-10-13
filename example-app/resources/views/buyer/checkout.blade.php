@@ -43,6 +43,7 @@
                             <div class="form-group">
                                 <div class="col-sm-3 col-xs-3">
                                     <img class="img-responsive" src="{{ asset('storage/images/' . $cartItem['image']) }}" />
+                                    <input type="hidden" name="image" input="{{ asset('storage/images/' . $cartItem['image']) }}">
                                 </div>
                                 <div class="col-sm-6 col-xs-6">
                                     <div class="col-xs-12">{{ $cartItem['name'] }}</div>
@@ -113,9 +114,22 @@
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <button type="submit" class="btn btn-primary btn-submit-fix">Place Order</button>
                             </div>
+                        </form>
+                        <form action="{{ route('vnpay.payment') }}" method="POST">
+                            @csrf
                             <div class="col-md-6 col-sm-6 col-xs-12">
-                                <a href="{{ route('vnpay.payment') }}" class="btn btn-primary btn-submit-fix">Order With VNPAY</a>
+                                <input type="hidden" name="total" type="text" value={{ $total }}>
+                                <button type="submit" name="redirect" class="btn btn-primary btn-submit-fix">Order With VNPAY</a>
                             </div>
+                        </form>
+                        <br>
+                        <form action="{{ route('momo.payment') }}" method="POST">
+                            @csrf
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="hidden" name="total" type="text" value={{ $total }}>
+                                <button type="submit" name="payUrl" class="btn btn-primary btn-submit-fix">Order With MoMo</a>
+                            </div>
+                        </form>    
                         </div>
                     </div>
                 </div>
@@ -123,10 +137,20 @@
                 <!-- CREDIT CARD PAYMENT -->
                 <!-- CREDIT CARD PAYMENT END -->
             </div>
-        </form>
     </div>
     <div class="row cart-footer">
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Lắng nghe sự kiện khi giá trị của input tên thay đổi
+        $('#name').on('input', function () {
+            var nameValue = $(this).val(); // Lấy giá trị từ input tên
+            // Gán giá trị tên cho tất cả các input có class "copy-value"
+            $('.copy-value').val(nameValue);
+        });
+    });
+</script>
 </body>
 </html>

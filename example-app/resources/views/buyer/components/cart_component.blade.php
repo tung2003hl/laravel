@@ -32,7 +32,6 @@
                   <!-- Data -->
                   <p><strong>{{$cartItem['name']}}</strong></p>
                   <p>Price: ${{number_format($cartItem['price'])}}</p>
-                  <p>{{$cartItem['id']}}</p>
             
                   <a href="{{route('delete.cart',[$id])}}" data-id="{{$id}}" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip" title="Remove item">
                     <i class="fas fa-trash"></i>
