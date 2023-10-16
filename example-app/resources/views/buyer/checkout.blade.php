@@ -26,7 +26,7 @@
         </div>
     </div>    
     <div class="row cart-body">
-        <form class="form-horizontal" method="POST" action="{{ route('place.order') }}">
+        <form id ="form1" class="form-horizontal" method="POST" action="{{ route('place.order') }}">
             @csrf
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 col-md-push-6 col-sm-push-6">
                 <!-- REVIEW ORDER -->
@@ -115,18 +115,30 @@
                                 <button type="submit" class="btn btn-primary btn-submit-fix">Place Order</button>
                             </div>
                         </form>
-                        <form action="{{ route('vnpay.payment') }}" method="POST">
+                        <form id="form2" action="{{ route('vnpay.payment') }}" method="POST">
                             @csrf
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input type="hidden" name="total" type="text" value={{ $total }}>
+                                <input type="hidden" name="total" type="text" value={{ $total }}>
+                                <input type="hidden" name="address" class="form-control" value=""  />
+                                <input type="hidden" name="name" class="form-control" value=""  />
+                                <input type="hidden" name="phone_number" class="form-control" value=""  />
+                                <input type="hidden" name="email_address" class="form-control" value=""  />                         
+                                <input type="hidden" name="note">
                                 <button type="submit" name="redirect" class="btn btn-primary btn-submit-fix">Order With VNPAY</a>
                             </div>
                         </form>
                         <br>
-                        <form action="{{ route('momo.payment') }}" method="POST">
+                        <form id="form3"  action="{{ route('momo.payment') }}" method="POST">
                             @csrf
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <input type="hidden" name="total" type="text" value={{ $total }}>
+                                <input type="hidden" name="address" class="form-control" value=""  />
+                                <input type="hidden" name="name" class="form-control" value=""  />
+                                <input type="hidden" name="phone_number" class="form-control" value=""  />
+                                <input type="hidden" name="email_address" class="form-control" value=""  />                          
+                                <input type="hidden" name="note">
+                                <br>
                                 <button type="submit" name="payUrl" class="btn btn-primary btn-submit-fix">Order With MoMo</a>
                             </div>
                         </form>    
@@ -144,13 +156,22 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Lắng nghe sự kiện khi giá trị của input tên thay đổi
-        $('#name').on('input', function () {
-            var nameValue = $(this).val(); // Lấy giá trị từ input tên
-            // Gán giá trị tên cho tất cả các input có class "copy-value"
-            $('.copy-value').val(nameValue);
+        // Lấy tất cả các trường input có cùng tên trong form 1 và form 2
+        var $form1Inputs = $("#form1 input");
+        var $form2Inputs = $("#form2 input");
+        var $form3Inputs = $("#form3 input");
+
+        // Theo dõi sự thay đổi trong tất cả các trường input của form 1
+        $form1Inputs.on("input", function () {
+            // Lấy giá trị của trường input trong form 1
+            var value = $(this).val();
+
+            // Cập nhật tất cả trường input có cùng tên trong form 2
+            $form2Inputs.filter('[name="' + this.name + '"]').val(value);
+            $form3Inputs.filter('[name="' + this.name + '"]').val(value);
         });
     });
 </script>
+
 </body>
 </html>

@@ -56,16 +56,45 @@ public function execPostRequest($url, $data)
         $accessKey = 'klm05TvNBzhg7h7j';
         $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
         $orderInfo = "Thanh toán qua ATM MoMo";
-        $amount = "10000";
+        $amount = $request->input('total') * 100;
         $orderId = time() . "";
         $redirectUrl = "http://localhost/checkout";
-        $ipnUrl = "http://localhost/checkout";
+        $ipnUrl = "http://localhost/checkout" ;
         $extraData = "";
         
         
         
             $requestId = time() . "";
             $requestType = "payWithATM";
+
+            $user = auth()->user();
+            $user_id = $user->id;
+            // Lưu thông tin đơn hàng vào bảng "order"
+            $order = new Order();// Cung cấp giá trị mới cho trường 'user_id'
+            $order->user_id = $user_id;
+            $order->delivery_address = $request->input('address');
+            $order->receiver_name = $request->input('name');
+            $order->phone_no = $request->input('phone_number');
+            $order->email = $request->input('email_address');
+            $order->total_price = $request->input('total');
+            $order->order_date = Carbon::now();
+            $order->note=$request->input('note'); // Điền giá trị của $total từ form vào đây
+            $order->save();
+    
+            // Lưu chi tiết đơn hàng vào bảng "order_detail" cho mỗi sản phẩm trong giỏ hàng
+            $cart = session()->get(key:'cart');
+            foreach ($cart as $carts) {           
+                $orderDetail = new OrderDetail();
+                $orderDetail->order_id = $order->id;
+                $orderDetail->food_id = $carts['id'];
+                $orderDetail->name = $carts['name'];
+                $orderDetail->quantity = $carts['quantity'];
+                $orderDetail->price = $carts['quantity'] * $carts['price'];
+                $orderDetail->image = $carts['image'];
+                $orderDetail->save();
+            }
+                $order = Order::where('user_id', $user_id)->latest()->first();
+                $orderDetails = OrderDetail::where('order_id', $order->id)->get();
             // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
             //before sign HMAC SHA256 signature
             $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
@@ -93,7 +122,6 @@ public function execPostRequest($url, $data)
                     
                 
     public function vnpay_payment(Request $request){
-    $data = $request->all();
     $code_cart= rand(00,9999);
      $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
     $vnp_Returnurl = "http://localhost/checkout";
@@ -103,7 +131,7 @@ public function execPostRequest($url, $data)
     $vnp_TxnRef = $code_cart; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này 
     $vnp_OrderInfo = 'Thanh toán đơn hàng test';
     $vnp_OrderType = 'billpayment';
-    $vnp_Amount = ($data['total']) *100000;
+    $vnp_Amount = $request->input('total') * 100;
     $vnp_Locale = 'VN';
     $vnp_BankCode = 'NCB';
     $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
