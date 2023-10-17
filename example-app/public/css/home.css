@@ -19,3 +19,17 @@
     border-radius: 0 5px 5px 0;
     cursor: pointer;
 }
+containerr {
+    width: 50px;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid #000;
+}
+
+.input-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 50%;
+    box-sizing: border-box;
+    margin: 10px; /* Thêm margin để tạo khoảng cách bên trái và bên phải 5px */
+}

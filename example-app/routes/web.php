@@ -72,6 +72,9 @@ Route::get('/checkout', [OrderController::class,'index'])->name('checkout');
 Route::post('/vnpay_payment', [OrderController::class,'vnpay_payment'])->name('vnpay.payment');
 Route::post('/momo_payment',[OrderController::class,'momo_payment'])->name('momo.payment');
 Route::post('/place-order', [OrderController::class,'store'])->name('place.order');
+Route::get('/thank.order', function () {
+    return view('buyer.thank_order');
+});
 
 //route profile
 Route::get('/profile',[ProfileController::class,'show'])->name('show.profile');

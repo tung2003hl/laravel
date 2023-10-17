@@ -45,93 +45,92 @@ public function execPostRequest($url, $data)
     return $result;
 }
 
-    public function momo_payment(Request $request){
+public function momo_payment(Request $request)
+{
+    $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+    $partnerCode = 'MOMOBKUN20180529';
+    $accessKey = 'klm05TvNBzhg7h7j';
+    $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+    $orderInfo = "Thanh toán qua ATM MoMo";
+    $amount = "10000";
+    $orderId = time() . "";
+    $redirectUrl = "http://localhost/thank.order";
+    $ipnUrl = "http://localhost/thank.order";
+    $extraData = "";
+    $requestId = time() . "";
+    $requestType = "payWithATM";
 
+    // Tạo đơn hàng mới và lưu thông tin đơn hàng vào cơ sở dữ liệu
+    $user = auth()->user();
+        $user_id = $user->id;
+        // Lưu thông tin đơn hàng vào bảng "order"
+        $order = new Order();// Cung cấp giá trị mới cho trường 'user_id'
+        $order->user_id = $user_id;
+        $order->delivery_address = $request->input('address');
+        $order->receiver_name = $request->input('name');
+        $order->phone_no = $request->input('phone_number');
+        $order->email = $request->input('email_address');
+        $order->total_price = $request->input('total');
+        $order->order_date = Carbon::now();
+        $order->note=$request->input('note');
+        $order->method=('MOMO'); // Điền giá trị của $total từ form vào đây
+        $order->save();
 
-
-        $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create"; 
-
-
-        $partnerCode = 'MOMOBKUN20180529';
-        $accessKey = 'klm05TvNBzhg7h7j';
-        $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
-        $orderInfo = "Thanh toán qua ATM MoMo";
-        $amount = $request->input('total') * 100;
-        $orderId = time() . "";
-        $redirectUrl = "http://localhost/checkout";
-        $ipnUrl = "http://localhost/checkout" ;
-        $extraData = "";
-        
-        
-        
-            $requestId = time() . "";
-            $requestType = "payWithATM";
-
-            $user = auth()->user();
-            $user_id = $user->id;
-            // Lưu thông tin đơn hàng vào bảng "order"
-            $order = new Order();// Cung cấp giá trị mới cho trường 'user_id'
-            $order->user_id = $user_id;
-            $order->delivery_address = $request->input('address');
-            $order->receiver_name = $request->input('name');
-            $order->phone_no = $request->input('phone_number');
-            $order->email = $request->input('email_address');
-            $order->total_price = $request->input('total');
-            $order->order_date = Carbon::now();
-            $order->note=$request->input('note'); // Điền giá trị của $total từ form vào đây
-            $order->save();
-    
-            // Lưu chi tiết đơn hàng vào bảng "order_detail" cho mỗi sản phẩm trong giỏ hàng
-            $cart = session()->get(key:'cart');
-            foreach ($cart as $carts) {           
-                $orderDetail = new OrderDetail();
-                $orderDetail->order_id = $order->id;
-                $orderDetail->food_id = $carts['id'];
-                $orderDetail->name = $carts['name'];
-                $orderDetail->quantity = $carts['quantity'];
-                $orderDetail->price = $carts['quantity'] * $carts['price'];
-                $orderDetail->image = $carts['image'];
-                $orderDetail->save();
-            }
-                $order = Order::where('user_id', $user_id)->latest()->first();
-                $orderDetails = OrderDetail::where('order_id', $order->id)->get();
-            // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
-            //before sign HMAC SHA256 signature
-            $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
-            $signature = hash_hmac("sha256", $rawHash, $secretKey);
-            $data = array('partnerCode' => $partnerCode,
-                'partnerName' => "Test",
-                "storeId" => "MomoTestStore",
-                'requestId' => $requestId,
-                'amount' => $amount,
-                'orderId' => $orderId,
-                'orderInfo' => $orderInfo,
-                'redirectUrl' => $redirectUrl,
-                'ipnUrl' => $ipnUrl,
-                'lang' => 'vi',
-                'extraData' => $extraData,
-                'requestType' => $requestType,
-                'signature' => $signature);
-            $result = $this->execPostRequest($endpoint, json_encode($data));
-            $jsonResult = json_decode($result, true);  // decode json
-        
-            //Just a example, please check more in there
-            return redirect()->to($jsonResult['payUrl']);
-            // header('Location: ' . $jsonResult['payUrl']);
+        // Lưu chi tiết đơn hàng vào bảng "order_detail" cho mỗi sản phẩm trong giỏ hàng
+        $cart = session()->get(key:'cart');
+        foreach ($cart as $carts) {           
+            $orderDetail = new OrderDetail();
+            $orderDetail->order_id = $order->id;
+            $orderDetail->food_id = $carts['id'];
+            $orderDetail->name = $carts['name'];
+            $orderDetail->quantity = $carts['quantity'];
+            $orderDetail->price = $carts['quantity'] * $carts['price'];
+            $orderDetail->image = $carts['image'];
+            $orderDetail->save();
         }
+        $order = Order::where('user_id', $user_id)->latest()->first();
+        $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+
+    // Tạo dữ liệu cho yêu cầu thanh toán MoMo
+    $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+    $signature = hash_hmac("sha256", $rawHash, $secretKey);
+    $data = array(
+        'partnerCode' => $partnerCode,
+        'partnerName' => "Test",
+        "storeId" => "MomoTestStore",
+        'requestId' => $requestId,
+        'amount' => $amount,
+        'orderId' => $orderId,
+        'orderInfo' => $orderInfo,
+        'redirectUrl' => $redirectUrl,
+        'ipnUrl' => $ipnUrl,
+        'lang' => 'vi',
+        'extraData' => $extraData,
+        'requestType' => $requestType,
+        'signature' => $signature
+    );
+
+    $result = $this->execPostRequest($endpoint, json_encode($data));
+    $jsonResult = json_decode($result, true); // Giải mã JSON
+    session()->forget('cart');
+
+    // Chuyển hướng người dùng đến trang thanh toán MoMo
+    return redirect()->to($jsonResult['payUrl']);
+}
+
                     
                 
     public function vnpay_payment(Request $request){
     $code_cart= rand(00,9999);
      $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    $vnp_Returnurl = "http://localhost/checkout";
+    $vnp_Returnurl = "http://localhost/thank.order";
     $vnp_TmnCode = "8TD5FYOP";//Mã website tại VNPAY 
     $vnp_HashSecret = "RIVTPCSJCEMHVLEETAMAEZXMSRYGZTQZ"; //Chuỗi bí mật
     
     $vnp_TxnRef = $code_cart; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này 
     $vnp_OrderInfo = 'Thanh toán đơn hàng test';
     $vnp_OrderType = 'billpayment';
-    $vnp_Amount = $request->input('total') * 100;
+    $vnp_Amount = $request->input('total') * 100000;
     $vnp_Locale = 'VN';
     $vnp_BankCode = 'NCB';
     $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
@@ -156,7 +155,35 @@ public function execPostRequest($url, $data)
     if (isset($vnp_Bill_State) && $vnp_Bill_State != "") {
         $inputData['vnp_Bill_State'] = $vnp_Bill_State;
     }
-    
+    $user = auth()->user();
+        $user_id = $user->id;
+        // Lưu thông tin đơn hàng vào bảng "order"
+        $order = new Order();// Cung cấp giá trị mới cho trường 'user_id'
+        $order->user_id = $user_id;
+        $order->delivery_address = $request->input('address');
+        $order->receiver_name = $request->input('name');
+        $order->phone_no = $request->input('phone_number');
+        $order->email = $request->input('email_address');
+        $order->total_price = $request->input('total');
+        $order->order_date = Carbon::now();
+        $order->note=$request->input('note');
+        $order->method=('VNPAY'); // Điền giá trị của $total từ form vào đây
+        $order->save();
+
+        // Lưu chi tiết đơn hàng vào bảng "order_detail" cho mỗi sản phẩm trong giỏ hàng
+        $cart = session()->get(key:'cart');
+        foreach ($cart as $carts) {           
+            $orderDetail = new OrderDetail();
+            $orderDetail->order_id = $order->id;
+            $orderDetail->food_id = $carts['id'];
+            $orderDetail->name = $carts['name'];
+            $orderDetail->quantity = $carts['quantity'];
+            $orderDetail->price = $carts['quantity'] * $carts['price'];
+            $orderDetail->image = $carts['image'];
+            $orderDetail->save();
+        }
+        $order = Order::where('user_id', $user_id)->latest()->first();
+        $orderDetails = OrderDetail::where('order_id', $order->id)->get();
     //var_dump($inputData);
     ksort($inputData);
     $query = "";
@@ -171,7 +198,7 @@ public function execPostRequest($url, $data)
         }
         $query .= urlencode($key) . "=" . urlencode($value) . '&';
     }
-    
+    session()->forget('cart');
     $vnp_Url = $vnp_Url . "?" . $query;
     if (isset($vnp_HashSecret)) {
         $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//  
@@ -186,6 +213,7 @@ public function execPostRequest($url, $data)
         } else {
             echo json_encode($returnData);
         }
+        
 
     }
     
@@ -216,7 +244,8 @@ public function execPostRequest($url, $data)
         $order->email = $request->input('email_address');
         $order->total_price = $total;
         $order->order_date = Carbon::now();
-        $order->note=$request->input('note'); // Điền giá trị của $total từ form vào đây
+        $order->note=$request->input('note');
+        $order->method=('COD'); // Điền giá trị của $total từ form vào đây
         $order->save();
 
         // Lưu chi tiết đơn hàng vào bảng "order_detail" cho mỗi sản phẩm trong giỏ hàng

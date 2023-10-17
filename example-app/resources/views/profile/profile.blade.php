@@ -100,7 +100,7 @@
                                 <div class="d-flex flex-column justify-content-between order-summary">
                                     <div class="d-flex align-items-center">
                                         <div class="text-uppercase">Order #{{$order->id}}</div>
-                                        <div class="blue-label ms-auto text-uppercase">COD</div>
+                                        <div class="blue-label ms-auto text-uppercase">{{$order->method}}</div>
                                     </div>
                                     <div class="fs-8">{{ $order->orderDetails->first()->food->shop->name }}</div>
                                     <div class="fs-8">{{$order->order_date}}</div>
