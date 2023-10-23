@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\MapQuestController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellerController;
@@ -79,5 +80,8 @@ Route::get('/thank.order', function () {
 //route profile
 Route::get('/profile',[ProfileController::class,'show'])->name('show.profile');
 Route::get('/order/detail/{order_id}',[ProfileController::class,'show_detail'])->name('order.detail');
+
+//route 
+// Route::get('/', [MapQuestController::class,'index']);
 
 

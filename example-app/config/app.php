@@ -186,6 +186,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Salmanbe\MapQuest\MapQuestServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -211,6 +212,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'MapQuest' => Salmanbe\MapQuest\MapQuest::class,
     ])->toArray(),
+    'map_quest_url' =>env('MAP_QUEST_URL',''),
+    'map_quest_key' =>env('MAP_QUEST_KEY',','),
 
 ];

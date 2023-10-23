@@ -87,6 +87,12 @@ public function momo_payment(Request $request)
             $orderDetail->price = $carts['quantity'] * $carts['price'];
             $orderDetail->image = $carts['image'];
             $orderDetail->save();
+
+            $food=Food::find($carts['id']);
+            if($food){
+                $food->sold_count+=$carts['quantity'];
+                $food->save();
+            }
         }
         $order = Order::where('user_id', $user_id)->latest()->first();
         $orderDetails = OrderDetail::where('order_id', $order->id)->get();
@@ -181,9 +187,16 @@ public function momo_payment(Request $request)
             $orderDetail->price = $carts['quantity'] * $carts['price'];
             $orderDetail->image = $carts['image'];
             $orderDetail->save();
+
+            $food=Food::find($carts['id']);
+            if($food){
+                $food->sold_count+=$carts['quantity'];
+                $food->save();
+            }
         }
         $order = Order::where('user_id', $user_id)->latest()->first();
         $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+        session()->forget('cart');
     //var_dump($inputData);
     ksort($inputData);
     $query = "";
@@ -198,7 +211,6 @@ public function momo_payment(Request $request)
         }
         $query .= urlencode($key) . "=" . urlencode($value) . '&';
     }
-    session()->forget('cart');
     $vnp_Url = $vnp_Url . "?" . $query;
     if (isset($vnp_HashSecret)) {
         $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);//  
@@ -259,6 +271,12 @@ public function momo_payment(Request $request)
             $orderDetail->price = $carts['quantity'] * $carts['price'];
             $orderDetail->image = $carts['image'];
             $orderDetail->save();
+
+            $food=Food::find($carts['id']);
+            if($food){
+                $food->sold_count+=$carts['quantity'];
+                $food->save();
+            }
         }
         $order = Order::where('user_id', $user_id)->latest()->first();
         $orderDetails = OrderDetail::where('order_id', $order->id)->get();

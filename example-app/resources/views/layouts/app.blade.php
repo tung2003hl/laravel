@@ -17,7 +17,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('js/app.js') }}"></script>
 
-
+@auth
+@endauth
 <!-- Include Font Awesome CSS for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -128,7 +129,7 @@ body {
                             <div class="cart" style="margin-top:11px;margin-right:25px;padding:0px">
 
                                     <a href="{{route('show.cart')}}"><i class="fas fa-shopping-cart"></i></a>
-                                    <span id="cart-count">0</span> - <span id="total-price">$0.00</span>
+                                    <span id="cart-count"></span> - <span id="total-price">$0.00</span>
                             </div>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
