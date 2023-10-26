@@ -106,7 +106,7 @@ public function update(Request $request, $id)
     // Chuyển hướng trở lại trang hiển thị thông tin cửa hàng
     return redirect()->route('introduce.shop', ['id' => $shop->id])->with('success', 'Thông tin cửa hàng đã được cập nhật thành công.');
 }
-public function view($shop_id)
+    public function view($shop_id)
     {
         // Retrieve shop details
         $shop = Shop::findOrFail($shop_id);
@@ -118,4 +118,18 @@ public function view($shop_id)
         return view('buyer.shop_detail', compact('shop', 'foods'));
 
     }
+
+    public function findShopsWithAddress(Request $request)
+{
+    $food = Food::join('categories', 'food.category_id', '=', 'categories.id') // Sử dụng phương thức join()
+                    ->select('food.*', 'categories.category_name') // Lấy tất cả trường từ bảng foods và cột category_name từ bảng categories
+                    ->get(); // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
+
+            $shopName = Shop::pluck('name','id');
+    $searchTerm = $request->input('location'); // Lấy giá trị từ trường 'location' trong form
+
+    $shop = Shop::where('address', 'LIKE', '%' . $searchTerm . '%')->get();
+
+    return view('home', ['shops' => $shop, 'searchTerm' => $searchTerm]);
+}
 }

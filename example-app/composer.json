@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
+        "pusher/pusher-php-server": "^7.2",
         "salmanbe/mapquest": "^1.0"
     },
     "require-dev": {

@@ -12,9 +12,9 @@ use App\Http\Controllers\ShopController;
 
 // Route chào mừng
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 // Route xác thực người dùng
 Auth::routes();
 
@@ -83,5 +83,21 @@ Route::get('/order/detail/{order_id}',[ProfileController::class,'show_detail'])-
 
 //route 
 // Route::get('/', [MapQuestController::class,'index']);
+Route::post('/shop/address',[ShopController::class,'findShopsWithAddress'])->name('shop.address');
+
+//route pusher notification
+Route::get('/', function () {
+    return view('showNotification');
+});
+
+Route::get('getPusher', function (){
+   return view('form_pusher');
+});
+
+Route::get('/pusher', function(Illuminate\Http\Request $request) {
+    $message = $request->get('message');
+    event(new App\Events\HelloPusherEvent($message));
+    return redirect('getPusher');
+});
 
 
