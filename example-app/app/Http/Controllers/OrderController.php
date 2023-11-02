@@ -52,12 +52,12 @@ public function momo_payment(Request $request)
     $accessKey = 'klm05TvNBzhg7h7j';
     $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
     $orderInfo = "Thanh toán qua ATM MoMo";
-    $amount = "10000";
+    $amount = $request->input('total') * 100000;
     $orderId = time() . "";
     $redirectUrl = "http://localhost/thank.order";
     $ipnUrl = "http://localhost/thank.order";
     $extraData = "";
-    $requestId = time() . "";
+    $requestId = time() . "";   
     $requestType = "payWithATM";
 
     // Tạo đơn hàng mới và lưu thông tin đơn hàng vào cơ sở dữ liệu

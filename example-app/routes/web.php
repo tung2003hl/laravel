@@ -5,6 +5,7 @@ use App\Http\Controllers\MapQuestController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SellerController;
+use App\Http\Controllers\SendMessageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
@@ -80,6 +81,10 @@ Route::get('/thank.order', function () {
 //route profile
 Route::get('/profile',[ProfileController::class,'show'])->name('show.profile');
 Route::get('/order/detail/{order_id}',[ProfileController::class,'show_detail'])->name('order.detail');
+Route::get('/profile/detail',[ProfileController::class,'show_profile'])->name('profile.detail');
+Route::post('/update/profile',[ProfileController::class,'update'])->name('update.profile');
+Route::get('/pass',[ProfileController::class,'show_pass'])->name('show.password');
+Route::post('/change/pass',[ProfileController::class,'changePassword'])->name('change.password');
 
 //route 
 // Route::get('/', [MapQuestController::class,'index']);
@@ -89,15 +94,8 @@ Route::post('/shop/address',[ShopController::class,'findShopsWithAddress'])->nam
 Route::get('/', function () {
     return view('showNotification');
 });
+Route::get('/send',[SendMessageController::class,'index'])->name('send');
+Route::post('/postMessage', [SendMessageController::class,'sendMessage'])->name('postMessage');
 
-Route::get('getPusher', function (){
-   return view('form_pusher');
-});
-
-Route::get('/pusher', function(Illuminate\Http\Request $request) {
-    $message = $request->get('message');
-    event(new App\Events\HelloPusherEvent($message));
-    return redirect('getPusher');
-});
 
 

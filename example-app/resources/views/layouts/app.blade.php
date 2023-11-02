@@ -129,7 +129,7 @@ body {
                             <div class="cart" style="margin-top:11px;margin-right:25px;padding:0px">
 
                                     <a href="{{route('show.cart')}}"><i class="fas fa-shopping-cart"></i></a>
-                                    <span id="cart-count"></span> - <span id="total-price">$0.00</span>
+                                    <span id="cart-count"></span>  <span id="total-price"></span>
                             </div>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -139,9 +139,6 @@ body {
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{route('show.profile')}}">
                                         Profile
-                                    </a>
-                                    <a class="dropdown-item" href="">
-                                        Transaction History
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
