@@ -86,27 +86,27 @@ body {
                     @auth
                     <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                         <ul class="navbar-nav">
-                            <li class="nav-item active">
+                            <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ url('/home') }}" style="font-size: 16px;">
                                     Home<span style="margin-right: 20px;"></span>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('food.list')}}" style="font-size: 16px;">
+                            <li class="nav-item {{ Request::is('food*') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('food.list') }}" style="font-size: 16px;">
                                     Food<span style="margin-right: 20px;"></span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item {{ Request::is('drink*') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{route('drink.list')}}" style="font-size: 16px;">
                                     Drink<span style="margin-right: 20px;"></span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item {{ Request::is('flower*') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{route('flower.list')}}" style="font-size: 16px;">
                                     Flower<span style="margin-right: 20px;"></span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item {{ Request::is('market*') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{route('market.list')}}" style="font-size: 16px;">
                                     Market<span style="margin-right: 20px;"></span>
                                 </a>

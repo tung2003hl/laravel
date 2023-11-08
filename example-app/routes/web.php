@@ -4,6 +4,7 @@ use App\Http\Controllers\FoodController;
 use App\Http\Controllers\MapQuestController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\SendMessageController;
 use Illuminate\Support\Facades\Route;
@@ -97,5 +98,9 @@ Route::get('/', function () {
 Route::get('/send',[SendMessageController::class,'index'])->name('send');
 Route::post('/postMessage', [SendMessageController::class,'sendMessage'])->name('postMessage');
 
+
+//route rating
+Route::post('/save/comment',[RatingController::class,'saveRating'])->name('save.rating');
+ 
 
 

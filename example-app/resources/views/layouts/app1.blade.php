@@ -12,9 +12,72 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://skywalkapps.github.io/bootstrap-notifications/stylesheets/bootstrap-notifications.css">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <style>
+        /* CSS để tạo kiểu cho nút dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    text-decoration: none;
+    color: #333;
+}
+
+.notification-icon {
+    font-size: 20px;
+}
+
+/* CSS cho dropdown container */
+.dropdown-container {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-width: 200px;
+    padding: 10px;
+    z-index: 1;
+}
+
+/* CSS cho dropdown toolbar */
+.dropdown-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.dropdown-toolbar-title {
+    margin: 0;
+}
+
+/* CSS cho dropdown menu và footer */
+.dropdown-menu {
+    list-style: none;
+    padding: 0;
+}
+
+.dropdown-footer {
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid #ccc;
+}
+
+/* Hiển thị dropdown-container khi hover vào dropdown */
+.dropdown:hover .dropdown-container {
+    display: block;
+}
+
+    </style>
 </head>
 <body>
     <div id="app">
@@ -49,6 +112,27 @@
                                 </li>
                             @endif
                         @else
+                        <div class="dropdown dropdown-notifications">
+                            <a href="#notifications-panel" class="dropdown-toggle">
+                                <i data-count="0" class="glyphicon glyphicon-bell notification-icon"></i>
+                            </a>
+                        
+                            <div class="dropdown-container">
+                                <div class="dropdown-toolbar">
+                                    <div class="dropdown-toolbar-actions">
+                                        <a href="#">Mark all as read</a>
+                                    </div>
+                                    <h3 class="dropdown-toolbar-title">Notifications (<span class="notif-count">0</span>)</h3>
+                                </div>
+                                <ul class="dropdown-menu">
+                                    <!-- Thêm các mục thông báo ở đây -->
+                                </ul>
+                                <div class="dropdown-footer text-center">
+                                    <a href="#">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                        
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -76,5 +160,57 @@
             @yield('content')
         </main>
     </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://js.pusher.com/4.3/pusher.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    var notificationsWrapper   = $('.dropdown-notifications');
+    var notificationsToggle    = notificationsWrapper.find('a[data-toggle]');
+    var notificationsCountElem = notificationsToggle.find('i[data-count]');
+    var notificationsCount     = parseInt(notificationsCountElem.data('count'));
+    var notifications          = notificationsWrapper.find('ul.dropdown-menu');
+
+
+    // Enable pusher logging - don't include this in production
+     Pusher.logToConsole = true;
+
+    var pusher = new Pusher('{{env('PUSHER_APP_KEY')}}', {
+        cluster: 'mt1',
+        encrypted: true
+    });
+
+    // Subscribe to the channel we specified in our Laravel Event
+    var channel = pusher.subscribe('Notify');
+
+    // Bind a function to a Event (the full Laravel class)
+    channel.bind('send-message', function(data) {
+        var existingNotifications = notifications.html();
+        var avatar = Math.floor(Math.random() * (71 - 20 + 1)) + 20;
+        var newNotificationHtml = `
+          <li class="notification active">
+              <div class="media">
+                <div class="media-left">
+                  <div class="media-object">
+                    <img src="https://api.adorable.io/avatars/71/`+avatar+`.png" class="img-circle" alt="50x50" style="width: 50px; height: 50px;">
+                  </div>
+                </div>
+                <div class="media-body">
+                  <strong class="notification-title">`+data.title+`</strong>
+                  <p class="notification-desc">`+data.content+`</p>
+                  <div class="notification-meta">
+                    <small class="timestamp">about a minute ago</small>
+                  </div>
+                </div>
+              </div>
+          </li>
+        `;
+        notifications.html(newNotificationHtml + existingNotifications);
+
+        notificationsCount += 1;
+        notificationsCountElem.attr('data-count', notificationsCount);
+        notificationsWrapper.find('.notif-count').text(notificationsCount);
+        notificationsWrapper.show();
+    });
+</script>
 </body>
 </html>

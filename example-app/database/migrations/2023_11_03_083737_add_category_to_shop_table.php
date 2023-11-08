@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->string('phone_no');
-            $table->string('email');
-            $table->string('status')->default('Processing');
+        Schema::table('shops', function (Blueprint $table) {
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')
+                  ->references('id')
+                  ->on('categories');
         });
     }
 
@@ -27,9 +28,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('phone_no');
-            $table->dropColumn('email');
+        Schema::table('shops', function (Blueprint $table) {
+            //
         });
     }
 };

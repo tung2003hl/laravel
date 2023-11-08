@@ -21,6 +21,7 @@
     <div class="containerr"> 
       <h3>Where should we delivery your food today?</h3>
       <form action="{{route('shop.address')}}" method="POST">
+        @csrf
       <input type="text" name="location" id="location" class="input-box" placeholder="Enter your address">
       <button type="submit">Tìm kiếm</button>
       </form>
@@ -45,7 +46,9 @@
         <a href="#" id="searchButton"><i style="color: blue" class="fas fa-search"></i></a>
     </div>
     <!-- Form tìm kiếm -->
-    <input type="text" class="search-input" name="searchTerm" placeholder="Tìm kiếm...">
+    <form action="{{route('food.search')}}" method="GET" id="searchForm">
+    <input type="text" class="search-input" id="searchInput" name="searchTerm" placeholder="Tìm kiếm...">
+    </form>
   </div>
 
     
@@ -63,7 +66,7 @@
             
               <div class="mask">
                 <div class="d-flex justify-content-start align-items-end h-100">
-                  <h5><span class="badge bg-primary ms-2">New</span></h5>
+                  <h5><span class="badge bg-primary ms-2"></span></h5>
                 </div>
               </div>
               <div class="hover-overlay">
