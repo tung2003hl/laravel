@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Rating;
 use App\Models\Category;
 use App\Models\Food;
-use App\Models\Order;
-use App\Models\OrderDetail;
 use Termwind\Components\Dd;
 use App\Models\Shop;
 use Carbon\Carbon;

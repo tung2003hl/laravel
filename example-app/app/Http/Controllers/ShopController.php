@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Rating;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Food;
@@ -114,8 +115,15 @@ public function update(Request $request, $id)
         // Retrieve food items related to the shop
         $foods = Food::where('shop_id', $shop_id)->get();
 
+        $ratings = Rating::with('user')->where('shop_id', $shop_id)->get();
+
+        // Calculate the average rating
+        $averageRating = $ratings->avg('rating');
+
+        $numberOfRatings = $ratings->count();
+
         // Pass the data to the shop detail view    
-        return view('buyer.shop_detail', compact('shop', 'foods'));
+        return view('buyer.shop_detail', compact('shop', 'foods','ratings','averageRating','numberOfRatings'));
 
     }
 
@@ -130,6 +138,6 @@ public function update(Request $request, $id)
 
     $shop = Shop::where('address', 'LIKE', '%' . $searchTerm . '%')->get();
 
-    return view('home', ['shops' => $shop, 'searchTerm' => $searchTerm]);
+    return view('buyer.home', ['shops' => $shop, 'searchTerm' => $searchTerm]);
 }
 }

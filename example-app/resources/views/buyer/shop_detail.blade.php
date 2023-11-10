@@ -1,3 +1,6 @@
+@php
+   use Carbon\Carbon;
+@endphp
 @extends('layouts.app') {{-- Sử dụng layout mặc định hoặc tùy chỉnh --}}
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +17,8 @@
 <body>
 @section('content')
 <!-- Modal -->
-<form action="" method="POST">
+<form action="{{route('save.rating')}}" method="POST">
+    @csrf
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -25,6 +29,7 @@
         <div class="modal-body">
             <div class="rating-css">
                 <div class="star-icon">
+                    <input type="hidden" value="{{$shop->id}}" name="shop_id">
                     <input type="radio" value="1" name="product_rating" checked id="rating1">
                     <label for="rating1" class="fa fa-star"></label>
                     <input type="radio" value="2" name="product_rating" id="rating2">
@@ -44,7 +49,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>
@@ -62,7 +67,7 @@
             <p><strong>Contact:</strong> {{ $shop->email }}</p>
             <p><strong>Phone:</strong> {{ $shop->phone_num }}</p>
             @php
-                $ratenum = number_format($shop->rate)
+                $ratenum = number_format($averageRating)
             @endphp
             <div class="rating">
                 <span><strong>Rating:</strong></span>
@@ -72,11 +77,38 @@
                 @for($j = $ratenum+1; $j<=5;$j++)
                 <i class="fa fa-star"></i>
                 @endfor
+                ({{$numberOfRatings}})
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Rate this shop
                 </button>
             </div>
             <p>{{ $shop->shop_description }}</p>
+            <div class="comment-box">
+                <div class="comment-header">
+                    <div class="comment-title">Comment</div>
+                </div>
+                @foreach($ratings as $ratings)
+            @php
+                $rate_num = number_format($ratings->rating)
+            @endphp
+            <hr>
+                <div class="comment-content">
+                    <div class="comment-info">
+                        <div class="commenter-name">{{ $ratings->user->name }}</div>
+                        @for($i=1;$i <=$rate_num; $i++)
+                        <i class="fa fa-star checked"></i>
+                        @endfor
+                        @for($j = $rate_num+1; $j<=5;$j++)
+                        <i class="fa fa-star"></i>
+                        @endfor
+                        <div class="comment-date">{{ Carbon::parse($ratings->created_at)->format('Y-m-d') }}</div>
+                    </div>
+                    {{ $ratings->comment }}
+                </div>
+                @endforeach
+            </div>
+            
+            
         </div>
     </div>
     <br>

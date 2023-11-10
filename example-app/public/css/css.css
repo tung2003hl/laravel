@@ -159,5 +159,37 @@
         transform: scale(0.8);
         transition: 0.3s ease;
       }
+      .comment-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 700px;
+        max-height: 215px;
+        text-align: center;
+        overflow-y: auto;
+    }
+    
+    .comment-title {
+        font-size: 20px;
+    }
+    
+    .comment-content {
+        text-align: left;
+    }
+    
+    .comment-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+    }
+    
+    .commenter-name {
+        font-weight: bold;
+    }
+    
+    .comment-date {
+        color: #888;
+    }
+    
     
     

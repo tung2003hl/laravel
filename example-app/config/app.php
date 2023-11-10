@@ -196,6 +196,7 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
 
     ],
 
@@ -213,6 +214,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'MapQuest' => Salmanbe\MapQuest\MapQuest::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        
     ])->toArray(),
     'map_quest_url' =>env('MAP_QUEST_URL',''),
     'map_quest_key' =>env('MAP_QUEST_KEY',','),

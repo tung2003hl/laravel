@@ -101,6 +101,10 @@ Route::post('/postMessage', [SendMessageController::class,'sendMessage'])->name(
 
 //route rating
 Route::post('/save/comment',[RatingController::class,'saveRating'])->name('save.rating');
+
+//route login 
+Route::get('/login-google',[\App\Http\Controllers\Auth\LoginController::class,'login_google']);
+Route::get('/google/callback',[\App\Http\Controllers\Auth\LoginController::class,'callback_google']);
  
 
 

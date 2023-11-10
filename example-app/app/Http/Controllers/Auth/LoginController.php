@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Login;
+use App\Models\Social;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
@@ -71,4 +75,52 @@ class LoginController extends Controller
     
         return redirect()->route('login'); // Redirect to the login route
     }
+
+    public function login_google(){
+        return Socialite::driver('google')->redirect();
+        }
+        public function callback_google(){
+        $users = Socialite::driver('google')->stateless()->user();
+        // return $users->id;
+        $authUser = $this->findOrCreateUser($users,'google');
+        $account_name = Login::where('admin_id',$authUser->user)->first();
+        Session::put('admin_login',$account_name->admin_name);
+        Session::put('admin_id&',$account_name->admin_id);
+        return redirect('/dashboard')->with('message', 'Đăng nhập Admin thành công');
+        
+        }
+        public function findOrCreateUser($users,$provider){
+        $authUser = Social::where('provider_user_id', $users->id)->first();
+        if($authUser){
+        
+        return $authUser;
+        }
+        
+        $tung = new Social([
+        'provider_user_id' => $users->id,
+        'provider' => strtoupper($provider)
+        
+        ]);
+        
+        $orang = Login::where('admin_email&',$users->email)->first();
+        
+        if(!$orang){
+        $orang = Login::create([
+        'admin_name' => $users->name,
+        'admin_email' => $users->email,
+        'admin_password' => '',
+        
+        'admin_phone' => '',
+        'admin_status' => 1
+        ]);
+        }
+        $tung->login()->associate($orang);
+        $tung->save();
+        
+        $account_name = Login::where('admin_id',$authUser->user)->first();
+        Session::put('admin_login',$account_name->admin_name);
+        Session::put('admin_id',$account_name->admin_id);
+        return redirect('/dashboard')->with('message', 'Đăng nhập Admin thành công');
+        
+        }
 }
