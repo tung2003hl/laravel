@@ -1,3 +1,6 @@
+@php
+    use App\Models\Wishlist;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +17,9 @@
 <body>
     @extends('layouts.app')
     @section('content')
+    @php
+   $wishlistcount = (App\Models\Wishlist::count());
+    @endphp
     <div class="container mt-4">
         <div class="row">
             <div class="col-lg-3 my-lg-0 my-md-1">
@@ -78,7 +84,7 @@
                                 alt="">
                             <div class="d-flex align-items-center mt-2">
                                 <div class="tag">Wishlist</div>
-                                <div class="ms-auto number"></div>
+                                <div class="ms-auto number">{{$wishlistcount}}</div>
                             </div>
                         </div>
                     </div>                                          

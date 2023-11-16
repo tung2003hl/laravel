@@ -6,6 +6,7 @@ use App\Models\Shop;
 use App\Models\User;
 use App\Models\Food;
 
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -46,15 +47,21 @@ public function store(Request $request)
 }
 public function show($id)
 {
-    $shop = Shop::find($id);
+    $shop = Shop::findOrFail($id);
 
-    if (!$shop) {
-        abort(404);
-    }
+        // Retrieve food items related to the shop
+        $foods = Food::where('shop_id', $id)->get();
 
-    $foods = $shop->foods; // Lấy danh sách sản phẩm của cửa hàng
+        $ratings = Rating::with('user')->where('shop_id', $id)->get();
 
-    return view('seller.introduce_shop', ['shop' => $shop, 'foods' => $foods]);
+        // Calculate the average rating
+        $averageRating = $ratings->avg('rating');
+
+        $numberOfRatings = $ratings->count();
+
+        // Pass the data to the shop detail view    
+        return view('seller.introduce_shop', compact('shop', 'foods','ratings','averageRating','numberOfRatings'));
+
 }
 public function delete($id)
 {

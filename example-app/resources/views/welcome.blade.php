@@ -175,7 +175,7 @@ function getPosition(position){
 }
 </script> --}}
 
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -228,4 +228,68 @@ if ("geolocation" in navigator) {
   });
 }
     }
+</script> --}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+      .product-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+      }
+
+      .product-item {
+          border: 1px solid #ccc;
+          margin-bottom: 10px;
+          padding: 10px;
+      }
+  </style>
+</head>
+
+<body>
+
+<div class="product-container">
+    <img src="your-product-image.jpg" alt="Product Image" class="product-image" />
+    <span class="wishlist-icon" id="wishlistIcon">&#x2665;</span>
+    <div class="wishlist-popup" id="wishlistPopup">
+      <ul class="product-list">
+    <li class="product-item">
+        <h3>Sản phẩm 1</h3>
+        <p>Giá: $10.00</p>
+    </li>
+    <li class="product-item">
+        <h3>Sản phẩm 2</h3>
+        <p>Giá: $20.00</p>
+    </li>
+    <!-- Thêm các mục cho các sản phẩm khác -->
+</ul>
+    </div>
+</div>
+
+<script>
+    
+$(document).ready(function () {
+    $(".wishlist-icon").on({
+        mouseenter: function () {
+            $(".wishlist-popup").show();
+        },
+        mouseleave: function () {
+            $(".wishlist-popup").hide();
+        }
+    });
+});
+
 </script>
+<script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+
+</body>
+</html>
+

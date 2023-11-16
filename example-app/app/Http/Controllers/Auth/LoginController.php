@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Login;
 use App\Models\Social;
+use App\Login;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -102,7 +102,7 @@ class LoginController extends Controller
         
         ]);
         
-        $orang = Login::where('admin_email&',$users->email)->first();
+        $orang = Login::where('admin_email',$users->email)->first();
         
         if(!$orang){
         $orang = Login::create([

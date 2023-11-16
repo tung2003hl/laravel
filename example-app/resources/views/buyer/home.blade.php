@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/home.css') }}">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-xxx" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -15,7 +16,11 @@
   @extends('layouts.app')
 
 @section('content')
-
+@if(session('message'))
+    <div class="alert alert-success">
+        {{ session('message') }}
+    </div>
+@endif
 <section style="background-color: #eee;">  
   <div class="container py-5 text-center">
     <div class="containerr"> 
@@ -71,7 +76,7 @@
               </div>
               <div class="hover-overlay">
                 <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-              </div>
+                  <a aria-label="Add to wishlist" class="action-btn hover-up wishlisted"  href="{{route('WishListShow',$food->id)}}"><i class="fas fa-heart wishlist-icon" data-food-id="{{ $food->id }}"></i></a>              </div>
             </a>
           </div>
           <div class="card-body">
@@ -85,7 +90,7 @@
           </div>
         </div>
       </div>
-      @endforeach
+    @endforeach
     </div>
   </div>
 </section>
@@ -100,6 +105,18 @@
             // Gửi form
             $('#searchForm').submit();
         });
+    });
+</script>
+<script>
+   $(document).ready(function () {
+    $('.card').hover(
+            function () {
+                $(this).find('.wishlist-icon').show();
+            },
+            function () {
+                $(this).find('.wishlist-icon').hide();
+            }
+        );
     });
 </script>
 {{-- <script>

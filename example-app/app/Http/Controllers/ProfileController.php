@@ -11,6 +11,7 @@ use App\Models\OrderDetail;
 use Termwind\Components\Dd;
 use App\Models\Shop;
 use Carbon\Carbon;
+use App\Models\Wishlist;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
@@ -29,10 +30,11 @@ class ProfileController extends Controller
     // Đếm số lượng id đơn đặt hàng duy nhất
     $totalQuantity = count($orderIds);
 
+
     $orders = $user->orders;
 
     // Lấy thông tin về order_detail và food cho mỗi đơn đặt hàng
-        $orders = $user->orders ->load('orderDetails.food.shop');
+    $orders = $user->orders ->load('orderDetails.food.shop');
     
 
     // Sử dụng hàm compact để truyền các biến vào view
@@ -42,7 +44,7 @@ public function getCartCount()
 {
     $cart = session()->get('cart');
     $totalQuantity = 0;
-
+    if (auth()->check()) {
     if ($cart) {
         foreach ($cart as $item) {
             $totalQuantity += $item['quantity'];
@@ -50,6 +52,7 @@ public function getCartCount()
     }
 
     return $totalQuantity;
+}
 }
     
     public function show_detail($order_id){
@@ -114,6 +117,12 @@ public function getCartCount()
         ]);
 
         return redirect()->route('profile.detail')->with('success', 'Password changed successfully');
+    }
+    public function WishListShowCount($id)
+    {
+        $wishlistcount = Wishlist::where('user_id', $id)->count();
+
+    return view('profile.profile', compact('wishlistcount'));
     }
 
 

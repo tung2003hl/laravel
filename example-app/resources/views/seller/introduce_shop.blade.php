@@ -1,3 +1,6 @@
+@php
+   use Carbon\Carbon;
+@endphp
 @extends('layouts.app1') {{-- Sử dụng layout mặc định hoặc tùy chỉnh --}}
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +34,44 @@
             <p><strong>Location:</strong> {{ $shop->address }}</p>
             <p><strong>Contact:</strong> {{ $shop->email }}</p>
             <p><strong>Phone:</strong> {{ $shop->phone_num }}</p>
+            @php
+                $ratenum = number_format($averageRating)
+            @endphp
+            <div class="rating">
+                <span><strong>Rating:</strong></span>
+                @for($i=1;$i <=$ratenum; $i++)
+                <i class="fa fa-star checked"></i>
+                @endfor
+                @for($j = $ratenum+1; $j<=5;$j++)
+                <i class="fa fa-star"></i>
+                @endfor
+                ({{$numberOfRatings}})
+            </div>
             <p>{{ $shop->shop_description }}</p>
+            <div class="comment-box">
+                <div class="comment-header">
+                    <div class="comment-title">Comment</div>
+                </div>
+                @foreach($ratings as $ratings)
+            @php
+                $rate_num = number_format($ratings->rating)
+            @endphp
+            <hr>
+                <div class="comment-content">
+                    <div class="comment-info">
+                        <div class="commenter-name">{{ $ratings->user->name }}</div>
+                        @for($i=1;$i <=$rate_num; $i++)
+                        <i class="fa fa-star checked"></i>
+                        @endfor
+                        @for($j = $rate_num+1; $j<=5;$j++)
+                        <i class="fa fa-star"></i>
+                        @endfor
+                        <div class="comment-date">{{ Carbon::parse($ratings->created_at)->format('Y-m-d') }}</div>
+                    </div>
+                    {{ $ratings->comment }}
+                </div>
+                @endforeach
+            </div>
             <div class="button-container">
                 <a href="{{ route('create.food', ['shop_id' => $shop->id]) }}" class="button">Create Product</a>
             </div>

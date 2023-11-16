@@ -7,6 +7,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\SendMessageController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Livewire\Admin\AdminAddCouponComponent;
+use App\Http\Livewire\Admin\AdminCouponsComponent;
+use App\Http\Livewire\Admin\AdminEditCouponComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
@@ -93,7 +97,7 @@ Route::post('/shop/address',[ShopController::class,'findShopsWithAddress'])->nam
 
 //route pusher notification
 Route::get('/', function () {
-    return view('showNotification');
+    return view('welcome');
 });
 Route::get('/send',[SendMessageController::class,'index'])->name('send');
 Route::post('/postMessage', [SendMessageController::class,'sendMessage'])->name('postMessage');
@@ -106,5 +110,12 @@ Route::post('/save/comment',[RatingController::class,'saveRating'])->name('save.
 Route::get('/login-google',[\App\Http\Controllers\Auth\LoginController::class,'login_google']);
 Route::get('/google/callback',[\App\Http\Controllers\Auth\LoginController::class,'callback_google']);
  
+Route::prefix('admin')->middleware('admin')->group(function () {
+Route::get('/admin/coupons',AdminCouponsComponent::class)->name('admin.coupons');
+Route::get('/admin/coupon/add',AdminAddCouponComponent::class)->name('admin.addcoupon');
+Route::get('/admin/coupon/edit/{coupon_id}',AdminEditCouponComponent::class)->name('admin.editcoupon');
+});
 
 
+Route::get('/wish-list/{id}',[WishlistController::class,'WishListShow'])->name('WishListShow');
+Route::get('/wishlist-count/{id}',[WishlistController::class,'WishListShowCount'])->name('WishListShowCount');

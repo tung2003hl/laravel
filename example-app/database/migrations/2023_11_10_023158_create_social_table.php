@@ -14,7 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('social', function (Blueprint $table) {
-            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade');
+            $table->integer('provider_user_id');
+            $table->string('provider');
+            $table->integer('user');
             $table->timestamps();
         });
     }
