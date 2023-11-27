@@ -109,6 +109,7 @@
 </script>
 <script>
    $(document).ready(function () {
+    $('.wishlist-icon').hide();
     $('.card').hover(
             function () {
                 $(this).find('.wishlist-icon').show();

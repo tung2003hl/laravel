@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Social;
 use App\Login;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -76,51 +77,76 @@ class LoginController extends Controller
         return redirect()->route('login'); // Redirect to the login route
     }
 
-    public function login_google(){
+    public function redirect()
+    {
         return Socialite::driver('google')->redirect();
+    }
+
+    public function callbackGoogle()
+    {
+        try{
+            $google_user = Socialite::driver('google')->user();
+
+            $user = User::where('social_id',$google_user->getId())->first();
+            if(!$user){
+                $new_user = User::create([
+                    'name' => $google_user->getName(),
+                    'email' => $google_user->getEmail(),
+                    'social_id' => (string) $google_user->getId(),
+                    'social_type' => '1'
+    
+                ]);
+
+                Auth::login($new_user);
+
+                return redirect()->route('home');
+            }
+            else{
+                Auth::login($user);
+
+                return redirect()->route('home');
+            }
+
+        } catch (\Throwable $th){
+            dd('Something went wrong! '.$th->getMessage() );
+            //throw $th
+    
         }
-        public function callback_google(){
-        $users = Socialite::driver('google')->stateless()->user();
-        // return $users->id;
-        $authUser = $this->findOrCreateUser($users,'google');
-        $account_name = Login::where('admin_id',$authUser->user)->first();
-        Session::put('admin_login',$account_name->admin_name);
-        Session::put('admin_id&',$account_name->admin_id);
-        return redirect('/dashboard')->with('message', 'Đăng nhập Admin thành công');
-        
+    }
+
+    public function redirect_facebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    public function callbackFacebook(){
+        try{
+            $facebook_user = Socialite::driver('facebook')->user();
+
+            $user = User::where('social_id',$facebook_user->getId())->first();
+            if(!$user){
+                $new_user = User::create([
+                    'name' => $facebook_user->getName(),
+                    'email' => $facebook_user->getEmail(),
+                    'social_id' => (string) $facebook_user->getId(),
+                    'social_type' => '2'
+    
+                ]);
+
+                Auth::login($new_user);
+
+                return redirect()->route('home');
+            }
+            else{
+                Auth::login($user);
+
+                return redirect()->route('home');
+            }
+
+        } catch (\Throwable $th){
+            dd('Something went wrong! '.$th->getMessage() );
+            //throw $th
+    
         }
-        public function findOrCreateUser($users,$provider){
-        $authUser = Social::where('provider_user_id', $users->id)->first();
-        if($authUser){
-        
-        return $authUser;
-        }
-        
-        $tung = new Social([
-        'provider_user_id' => $users->id,
-        'provider' => strtoupper($provider)
-        
-        ]);
-        
-        $orang = Login::where('admin_email',$users->email)->first();
-        
-        if(!$orang){
-        $orang = Login::create([
-        'admin_name' => $users->name,
-        'admin_email' => $users->email,
-        'admin_password' => '',
-        
-        'admin_phone' => '',
-        'admin_status' => 1
-        ]);
-        }
-        $tung->login()->associate($orang);
-        $tung->save();
-        
-        $account_name = Login::where('admin_id',$authUser->user)->first();
-        Session::put('admin_login',$account_name->admin_name);
-        Session::put('admin_id',$account_name->admin_id);
-        return redirect('/dashboard')->with('message', 'Đăng nhập Admin thành công');
-        
-        }
+    }
 }

@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'checkSellerRole' => \App\Http\Middleware\CheckSellerRole::class,
         'checkShipperRole' => \App\Http\Middleware\CheckShipperRole::class,
         'redirect.post.to.get' => \App\Http\Middleware\RedirectPostToGet::class,
+        'authadmin' => \App\Http\Middleware\AuthAdmin::class,
     ];
 }

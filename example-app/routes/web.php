@@ -13,8 +13,10 @@ use App\Http\Livewire\Admin\AdminCouponsComponent;
 use App\Http\Livewire\Admin\AdminEditCouponComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ShopController;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
 
 // Route chào mừng
 
@@ -89,6 +91,7 @@ Route::get('/order/detail/{order_id}',[ProfileController::class,'show_detail'])-
 Route::get('/profile/detail',[ProfileController::class,'show_profile'])->name('profile.detail');
 Route::post('/update/profile',[ProfileController::class,'update'])->name('update.profile');
 Route::get('/pass',[ProfileController::class,'show_pass'])->name('show.password');
+Route::get('/seller/profile',[ProfileController::class,'seller_show'])->name('seller.profile');
 Route::post('/change/pass',[ProfileController::class,'changePassword'])->name('change.password');
 
 //route 
@@ -107,8 +110,32 @@ Route::post('/postMessage', [SendMessageController::class,'sendMessage'])->name(
 Route::post('/save/comment',[RatingController::class,'saveRating'])->name('save.rating');
 
 //route login 
-Route::get('/login-google',[\App\Http\Controllers\Auth\LoginController::class,'login_google']);
-Route::get('/google/callback',[\App\Http\Controllers\Auth\LoginController::class,'callback_google']);
+// Route::get('auth/google',function(){
+//     return Socialite::driver('google')->redirect();
+// });
+
+// Route::get('/auth/google/callback',function(){
+//     $userSocialite = Socialite::driver('google')->user();
+
+//     $user = User::firstOrNew(['email' => $userSocialite->getEmail()]);
+//     $user->name = $userSocialite->getName();
+//     $user->avatar = $userSocialite->getAvatar();
+//     // Các thông tin khác bạn muốn lưu trữ
+
+//     $user->save();
+
+//     Auth::login($user); // Đăng nhập người dùng
+
+//     return redirect()->route('home');
+
+//     // Kiểm tra xem người dùng đã tồn tại trong cơ sở dữ liệu hay chư
+// });
+
+//route login with social
+Route::get('auth/google',[LoginController::class,'redirect'])->name('google-auth');
+Route::get('auth/google/callback',[LoginController::class,'callbackGoogle']);
+Route::get('auth/facebook',[LoginController::class,'redirect_facebook'])->name('facebook.auth');
+Route::get('auth/facebook/callback',[LoginController::class,'callbackFacebook']);
  
 Route::prefix('admin')->middleware('admin')->group(function () {
 Route::get('/admin/coupons',AdminCouponsComponent::class)->name('admin.coupons');
@@ -119,3 +146,4 @@ Route::get('/admin/coupon/edit/{coupon_id}',AdminEditCouponComponent::class)->na
 
 Route::get('/wish-list/{id}',[WishlistController::class,'WishListShow'])->name('WishListShow');
 Route::get('/wishlist-count/{id}',[WishlistController::class,'WishListShowCount'])->name('WishListShowCount');
+Route::get('/remove/{id}',[WishlistController::class,'removeItem'])->name('remove.wishlist');   

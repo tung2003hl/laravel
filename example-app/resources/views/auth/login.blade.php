@@ -62,6 +62,12 @@
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif
+                                <hr class="my-4" style="width: 400px;">
+
+                                <a href="{{route('google-auth')}}" class="btn btn-lg btn-block btn-primary" style="width: 400px; background-color: #dd4b39;"
+                                ><i class="fab fa-google me-2"></i> Sign in with google</a>
+                                <a href="{{route('facebook.auth')}}" class="btn btn-lg btn-block btn-primary mb-2" style="width:400px;background-color: #3b5998;"
+                                ><i class="fab fa-facebook-f me-2"></i>Sign in with facebook</a>
                             </div>
                         </div>
                     </form>

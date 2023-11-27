@@ -29,4 +29,17 @@ class WishlistController extends Controller
 
         return view('profile.profile', compact('wishlistcount'));
     }
+    public function show($id)
+    {
+        
+    }
+
+    public function removeItem(Request $request, $id)
+    {
+        $wishlistItem = Wishlist::findOrFail($id);
+
+        $wishlistItem->delete();
+
+        return response()->json(['success' => true]);
+    }
 }

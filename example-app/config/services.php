@@ -25,16 +25,24 @@ return [
         'token' => env('POSTMARK_TOKEN'),
     ],
 
-    'ses' => [
+    'ses' => [  
         'key' => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
     'google' =>[
-        'client_id' => '372544437148-7b34dn1ced9om16e590e6he7mg9hooc0.apps.googleusercontent.com',
-        'client_secret' => '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',
-        'redirect' => 'http://localhost/google/callback'
+        'client_id' => '372544437148-818kr2udcst5l6e2ouldbuko2rbr932c.apps.googleusercontent.com',
+        'client_secret' => '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',
+        'redirect' => '/auth/google/callback'
     ],
 
+
+    'facebook' =>[
+        'client_id'=>'2065725140493939',
+        'client_secret'=>'509fde74e30b84607610874bebb1f0dc',
+        'redirect' =>'/auth/facebook/callback'
+    ]
+
 ];
+    

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\View;
 use App\Models\Category;
 use App\Models\Food;
 use App\Models\Shop;
@@ -9,7 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Termwind\Components\Dd;
 use App\Models\OrderDetail;
+use App\Models\Wishlist;
 use App\Models\Order;
+use Illuminate\Support\Facades\DB;
 
 class FoodController extends Controller
 {
@@ -76,20 +79,60 @@ public function search(Request $request)
 
     if ($previousUrl === '/food') {
         $food = $this->searchFood($searchTerm);
-        $shopName = Shop::pluck('name', 'id');
-        return view('buyer.home', compact('food', 'shopName'));
+        $wishlistItems = $this->getWishlistItems(auth()->id());
+
+            $shopName = Shop::pluck('name','id');
+
+            $wishlistcount = $this->WishListShowCount(auth()->id());
+
+            View::share('wishlistItems', $wishlistItems);
+            View::share('food', $food);
+            View::share('shopName', $shopName);
+            View::share('wishlistcount', $wishlistcount);
+
+        return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
     } elseif ($previousUrl === '/drink') {
         $food = $this->searchDrink($searchTerm);
-        $shopName = Shop::pluck('name', 'id');
-        return view('buyer.home', compact('food', 'shopName'));
+        $wishlistItems = $this->getWishlistItems(auth()->id());
+
+            $shopName = Shop::pluck('name','id');
+
+            $wishlistcount = $this->WishListShowCount(auth()->id());
+
+            View::share('wishlistItems', $wishlistItems);
+            View::share('food', $food);
+            View::share('shopName', $shopName);
+            View::share('wishlistcount', $wishlistcount);
+
+        return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
     } elseif ($previousUrl === '/flower') {
         $food = $this->searchFlower($searchTerm);
-        $shopName = Shop::pluck('name', 'id');
-        return view('buyer.home', compact('food', 'shopName'));
+        $wishlistItems = $this->getWishlistItems(auth()->id());
+
+            $shopName = Shop::pluck('name','id');
+
+            $wishlistcount = $this->WishListShowCount(auth()->id());
+
+            View::share('wishlistItems', $wishlistItems);
+            View::share('food', $food);
+            View::share('shopName', $shopName);
+            View::share('wishlistcount', $wishlistcount);
+
+        return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
     } elseif ($previousUrl === '/market') {
         $food = $this->searchMarket($searchTerm);
-        $shopName = Shop::pluck('name', 'id');
-        return view('buyer.home', compact('food', 'shopName'));
+        $wishlistItems = $this->getWishlistItems(auth()->id());
+
+            $shopName = Shop::pluck('name','id');
+
+            $wishlistcount = $this->WishListShowCount(auth()->id());
+
+            View::share('wishlistItems', $wishlistItems);
+            View::share('food', $food);
+            View::share('shopName', $shopName);
+            View::share('wishlistcount', $wishlistcount);
+
+        return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
     } else {
         // Xử lý các localhost khác nếu cần
         $food = Food::join('categories', 'food.category_id', '=', 'categories.id')
@@ -98,8 +141,18 @@ public function search(Request $request)
         ->get();
 
         // Trả về view hiển thị kết quả tìm kiếm
-        $shopName = Shop::pluck('name','id');
-        return view('buyer.home', compact('food', 'shopName'));
+        $wishlistItems = $this->getWishlistItems(auth()->id());
+
+            $shopName = Shop::pluck('name','id');
+
+            $wishlistcount = $this->WishListShowCount(auth()->id());
+
+            View::share('wishlistItems', $wishlistItems);
+            View::share('food', $food);
+            View::share('shopName', $shopName);
+            View::share('wishlistcount', $wishlistcount);
+
+        return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
     }
 }
 
@@ -319,8 +372,18 @@ public function delete($id)
             ->get();
          // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
 
-            $shopName = Shop::pluck('name','id');
-            return view('buyer.home', compact('food', 'shopName')); // Lấy ra các sản phẩm có category_id bằng 1
+         $wishlistItems = $this->getWishlistItems(auth()->id());
+
+         $shopName = Shop::pluck('name','id');
+
+         $wishlistcount = $this->WishListShowCount(auth()->id());
+
+         View::share('wishlistItems', $wishlistItems);
+         View::share('food', $food);
+         View::share('shopName', $shopName);
+         View::share('wishlistcount', $wishlistcount);
+
+     return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
         }
         public function getDrink(){
             $food = Food::join('categories', 'food.category_id', '=', 'categories.id')
@@ -329,8 +392,18 @@ public function delete($id)
             ->get();
          // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
 
-            $shopName = Shop::pluck('name','id');
-            return view('buyer.home', compact('food', 'shopName')); // Lấy ra các sản phẩm có category_id bằng 1
+         $wishlistItems = $this->getWishlistItems(auth()->id());
+
+         $shopName = Shop::pluck('name','id');
+
+         $wishlistcount = $this->WishListShowCount(auth()->id());
+
+         View::share('wishlistItems', $wishlistItems);
+         View::share('food', $food);
+         View::share('shopName', $shopName);
+         View::share('wishlistcount', $wishlistcount);
+
+     return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
         }
          
         public function getFlower(){
@@ -340,8 +413,18 @@ public function delete($id)
             ->get();
          // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
 
-            $shopName = Shop::pluck('name','id');
-            return view('buyer.home', compact('food', 'shopName')); // Lấy ra các sản phẩm có category_id bằng 1
+         $wishlistItems = $this->getWishlistItems(auth()->id());
+
+         $shopName = Shop::pluck('name','id');
+
+         $wishlistcount = $this->WishListShowCount(auth()->id());
+
+         View::share('wishlistItems', $wishlistItems);
+         View::share('food', $food);
+         View::share('shopName', $shopName);
+         View::share('wishlistcount', $wishlistcount);
+
+     return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
         
 
         }
@@ -352,9 +435,37 @@ public function delete($id)
             ->get();
          // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
 
-            $shopName = Shop::pluck('name','id');
-            return view('buyer.home', compact('food', 'shopName')); // Lấy ra các sản phẩm có category_id bằng 1
+         $wishlistItems = $this->getWishlistItems(auth()->id());
+
+         $shopName = Shop::pluck('name','id');
+
+         $wishlistcount = $this->WishListShowCount(auth()->id());
+
+         View::share('wishlistItems', $wishlistItems);
+         View::share('food', $food);
+         View::share('shopName', $shopName);
+         View::share('wishlistcount', $wishlistcount);
+
+     return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
         }
+
+        public function WishListShowCount($id)
+{
+    $wishlistcount = Wishlist::where('user_id', $id)->count();
+
+    return $wishlistcount;
+}
+
+    protected function getWishlistItems($userId)
+    {
+        // Lấy dữ liệu từ bảng wishlist và food với điều kiện liên kết food_id và id
+        return DB::table('wishlists')
+                    ->join('food', 'wishlists.food_id', '=', 'food.id')
+                    ->select('wishlists.id as wishlist_id','food.name', 'food.price','food.image_url')
+                    ->where('wishlists.user_id', $userId)
+                    ->get();
+    }
+
         
 
 

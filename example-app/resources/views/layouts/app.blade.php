@@ -69,6 +69,69 @@ body {
     top: 10px;
     right: 100px;
 }
+.product-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .product-item {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+      .wishlist-iconn {
+        right: 25%;
+          position: relative;
+          display: inline-block;
+          font-size: 24px;
+        }
+
+        #wishlistCount {
+          position: absolute;
+          top: -10px;
+          right: -10px;
+          background-color: red;
+          color: white;
+          border-radius: 50%;
+          padding: 2px 5px;
+          font-size: 10px;
+        }
+        .wishlist-popup {
+        display: none;
+        position: absolute;
+        top: 100%; /* Hiển thị dưới biểu tượng */
+        left: 79%;
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        z-index: 1000;
+        } /* Ẩn popup ban đầu */
+        /* Thêm các kiểu CSS khác nếu cần */
+        .product-list {
+            background-color: #f4f4f4; /* Chọn màu sắc bạn muốn sử dụng */
+            padding: 10px; /* Tăng khoảng cách giữa các phần tử trong product-list */
+            border-radius: 8px; /* Bo tròn các góc của product-list */
+        }
+
+        .product-item {
+            margin-bottom: 10px; /* Tăng khoảng cách giữa các product-item */
+        }
+
+        .product-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .product-image img {
+            width: 50px; /* Đặt kích thước hình ảnh theo ý muốn */
+            height: 70px; /* Đảm bảo tỷ lệ khung hình không bị biến đổi */
+            margin-right: 10px; /* Tăng khoảng cách giữa hình ảnh và thông tin sản phẩm */
+        }
+
+        .product-details {
+            flex: 1; /* Mở rộng product-details để chiếm toàn bộ không gian còn lại */
+        }
     </style>
 </head>
 <body>
@@ -126,6 +189,31 @@ body {
                                     <a class="btnnn btn-register" href="{{ route('register') }}">{{ __('Register') }}</a>
                             @endif
                         @else
+                            <div class="wishlist-iconn" id="wishlistIcon">&#x2665;<span id="wishlistCount">{{$wishlistcount}}</span></div>
+                            <div class="wishlist-popup" id="wishlistPopup">
+                            @if ($wishlistcount > 0)
+                                <ul class="product-list">
+                                    @foreach ($wishlistItems as $item)
+                                    <li class="product-item" data-wishlist-id="{{ $item->wishlist_id }}">
+                                        <div class="product-info">
+                                            <div class="product-image">
+                                                <img src="{{ asset('storage/images/'.$item->image_url) }}" alt="Product Image">
+                                            </div>
+                                            <div class="product-details">
+                                                <h3>{{ $item->name }}</h3>
+                                                <p>Price: ${{ $item->price }}</p>
+                                                <div class="product-actions">
+                                                    <a href="#" class="remove-from-wishlist">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                                </ul>
+                            @endif
+                            </div>
                             <div class="cart" style="margin-top:11px;margin-right:25px;padding:0px">
 
                                     <a href="{{route('show.cart')}}"><i class="fas fa-shopping-cart"></i></a>
@@ -163,4 +251,57 @@ body {
 
     </div>
 </body>
+<script>
+    $(document).ready(function () {
+        var popupVisible = false;
+        var wishlistCount = 0;
+
+        $(".wishlist-iconn").on("click", function () {
+            if (popupVisible) {
+                $(".wishlist-popup").hide();
+            } else {
+                $(".wishlist-popup").show();
+            }
+
+            popupVisible = !popupVisible;
+        });
+        $(document).on("click", function (event) {
+        var isInsideWishlistIcon = $(event.target).closest(".wishlist-iconn").length > 0;
+        var isInsidePopup = $(event.target).closest(".wishlist-popup").length > 0;
+        if (popupVisible && !isInsideWishlistIcon && !isInsidePopup) {
+            $(".wishlist-popup").hide();
+            popupVisible = false;
+        }
+    });
+
+    });
+
+    $(document).ready(function () {
+    $(".remove-from-wishlist").on("click", function (event) {
+        event.preventDefault();
+        var wishlistId = $(this).closest(".product-item").data("wishlist-id");
+
+        $.ajax({
+            url: '/remove/' + wishlistId,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                // Xử lý phản hồi từ server nếu cần
+                console.log(data);
+                
+                location.reload();
+            },
+            error: function (xhr, status, error) {  
+                // Xử lý lỗi nếu có
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+</script>
+<script
+  src="https://code.jquery.com/jquery-3.7.1.js"
+  integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
 </html>

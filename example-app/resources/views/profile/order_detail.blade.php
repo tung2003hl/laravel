@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/transaction_history.css') }}">
 </head>
 <body>
-    @extends('layouts.app')
+    @extends(Auth::user()->type == 0 ? 'layouts.app' : 'layouts.app1')
     @section('content')
     <a style="text-decoration:none;" class="btn btn-link text-black ml-2 mt-0" href="{{route('show.profile')}}"><- Profile</a>
     <div class="container-fluid my-5  d-flex  justify-content-center">

@@ -13,6 +13,7 @@ use App\Models\Shop;
 use Carbon\Carbon;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -30,6 +31,8 @@ class ProfileController extends Controller
     // Đếm số lượng id đơn đặt hàng duy nhất
     $totalQuantity = count($orderIds);
 
+    $wishlistItems = $this->getWishlistItems(auth()->id());
+
 
     $orders = $user->orders;
 
@@ -38,7 +41,7 @@ class ProfileController extends Controller
     
 
     // Sử dụng hàm compact để truyền các biến vào view
-    return view('profile.profile', compact('user', 'orders','cartCount','totalQuantity'));
+    return view('profile.profile', compact('wishlistItems','user', 'orders','cartCount','totalQuantity'));
 }
 public function getCartCount()
 {
@@ -124,6 +127,43 @@ public function getCartCount()
 
     return view('profile.profile', compact('wishlistcount'));
     }
+
+    protected function getWishlistItems($userId)
+    {
+        // Lấy dữ liệu từ bảng wishlist và food với điều kiện liên kết food_id và id
+        return DB::table('wishlists')
+                    ->join('food', 'wishlists.food_id', '=', 'food.id')
+                    ->select('food.name', 'food.price','food.image_url')
+                    ->where('wishlists.user_id', $userId)
+                    ->get();
+    }
+
+    public function seller_show()
+{
+    $user = auth()->user();
+    $cartCount = $this->getCartCount();
+    
+
+    if (!$user) {
+        return abort(404);
+    }
+    $orderIds = $user->orders->pluck('id')->unique()->toArray();
+
+    // Đếm số lượng id đơn đặt hàng duy nhất
+    $totalQuantity = count($orderIds);
+
+    $wishlistItems = $this->getWishlistItems(auth()->id());
+
+
+    $orders = $user->orders;
+
+    // Lấy thông tin về order_detail và food cho mỗi đơn đặt hàng
+    $orders = $user->orders ->load('orderDetails.food.shop');
+    
+
+    // Sử dụng hàm compact để truyền các biến vào view
+    return view('seller.profile', compact('wishlistItems','user', 'orders','cartCount','totalQuantity'));
+}
 
 
 }

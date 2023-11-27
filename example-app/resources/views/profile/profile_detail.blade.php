@@ -84,7 +84,7 @@
     </style>
 </head>
 <body>
-    @extends('layouts.app')
+    @extends(Auth::user()->type == 0 ? 'layouts.app' : 'layouts.app1')
     @section('content')
     <div class="container mt-4">
         <div class="row">

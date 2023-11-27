@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\View;
 use App\Models\Category;
 use App\Models\Food;
 use App\Models\Shop;
+use App\Models\Wishlist;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class HomeController extends Controller
@@ -34,8 +37,18 @@ class HomeController extends Controller
                     ->select('food.*', 'categories.category_name') // Lấy tất cả trường từ bảng foods và cột category_name từ bảng categories
                     ->get(); // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
 
+            $wishlistItems = $this->getWishlistItems(auth()->id());
+
             $shopName = Shop::pluck('name','id');
-            return view('buyer.home', compact('food', 'shopName'));
+
+            $wishlistcount = $this->WishListShowCount(auth()->id());
+
+            View::share('wishlistItems', $wishlistItems);
+            View::share('food', $food);
+            View::share('shopName', $shopName);
+            View::share('wishlistcount', $wishlistcount);
+
+            return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
         } else {
             // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
             return redirect()->route('login');
@@ -52,5 +65,36 @@ class HomeController extends Controller
     public function shipperHome()
     {
         return view('shipper.shipperHome');
+    }
+    public function WishListShowCount($id)
+{
+    $wishlistcount = Wishlist::where('user_id', $id)->count();
+
+    return $wishlistcount;
+}
+
+    protected function getWishlistItems($userId)
+    {
+        // Lấy dữ liệu từ bảng wishlist và food với điều kiện liên kết food_id và id
+        return DB::table('wishlists')
+                    ->join('food', 'wishlists.food_id', '=', 'food.id')
+                    ->select('wishlists.id as wishlist_id','food.name', 'food.price','food.image_url')
+                    ->where('wishlists.user_id', $userId)
+                    ->get();
+    }
+
+    public function removeItem(Request $request, $wishlist_id)
+    {
+        // Xác định sản phẩm cần xóa từ wishlist_id
+        $wishlistItem = Wishlist::where('id', $wishlist_id)->firstOrFail();
+
+        // Kiểm tra xem người dùng hiện tại có quyền xóa sản phẩm này hay không (nếu cần)
+        // ...
+
+        // Thực hiện xóa sản phẩm
+        $wishlistItem->delete();
+
+        // Có thể trả về một phản hồi JSON nếu cần
+        return response()->json(['success' => true]);
     }
 }
