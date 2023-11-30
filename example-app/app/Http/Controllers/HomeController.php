@@ -9,6 +9,7 @@ use App\Models\Shop;
 use App\Models\Wishlist;
 use Auth;
 use Illuminate\Http\Request;
+use App\Services\HomeService;
 use Illuminate\Support\Facades\DB;
 
 
@@ -19,9 +20,12 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    protected $homeService;
+
+    public function __construct(HomeService $homeService)
     {
         $this->middleware('auth');
+        $this->homeService = $homeService;
     }
 
     /**
@@ -30,30 +34,23 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        if (auth()->check()) {
-            // Nếu đã đăng nhập, lấy danh sách sản phẩm
-            $food = Food::join('categories', 'food.category_id', '=', 'categories.id') // Sử dụng phương thức join()
-                    ->select('food.*', 'categories.category_name') // Lấy tất cả trường từ bảng foods và cột category_name từ bảng categories
-                    ->get(); // Hoặc bạn có thể thay thế bằng truy vấn tùy chỉnh
+{
+    if (auth()->check()) {
+        $userId = auth()->id();
 
-            $wishlistItems = $this->getWishlistItems(auth()->id());
+        // Sử dụng service để lấy dữ liệu từ wishlist và food
+        $homeData = $this->homeService->getHomeData($userId);
 
-            $shopName = Shop::pluck('name','id');
-
-            $wishlistcount = $this->WishListShowCount(auth()->id());
-
-            View::share('wishlistItems', $wishlistItems);
-            View::share('food', $food);
-            View::share('shopName', $shopName);
-            View::share('wishlistcount', $wishlistcount);
-
-            return view('buyer.home', compact('wishlistItems','food', 'shopName','wishlistcount'));
+        if ($homeData) {
+            return view('buyer.home', $homeData);
         } else {
-            // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
-            return redirect()->route('login');
+            // Thêm trường hợp trả về giá trị nếu $homeData không tồn tại
+            return view('login'); // Hoặc có thể trả về một giá trị khác tùy thuộc vào logic của ứng dụng
         }
+    } else {
+        return redirect()->route('login');
     }
+}
 
     public function sellerHome()
     {

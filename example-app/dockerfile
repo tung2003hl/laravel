@@ -1,0 +1,48 @@
+FROM php:8.1-apache
+ 
+# Set the working directory in the container
+WORKDIR /var/www/html
+ 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip
+ 
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+ 
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+ 
+# Copy the application code to the container
+COPY . .
+ 
+# Install application dependencies
+ 
+# Set environment variables
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+ENV MYSQL_DATABASE=dbproject
+ENV MYSQL_USER=sail
+ENV MYSQL_PASSWORD=password
+ENV MYSQL_HOST=mysql
+ 
+# Enable Apache rewrite module
+RUN a2enmod rewrite
+ 
+# Set up the Apache virtual host
+#COPY docker/vhost.conf /etc/apache2/sites-available/000-default.conf
+ 
+# Expose port 80
+EXPOSE 80
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+RUN composer install --optimize-autoloader --no-dev
+ 
+# Start the Apache server
+CMD ["apache2-foreground"]
